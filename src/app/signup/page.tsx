@@ -161,7 +161,7 @@ export default function SignUpPage() {
             <label style={{display:"block", marginBottom:"5px", fontSize:"14px", color:"#9ca3af"}}>Last.fm 아이디 <span style={{color:"#ef4444"}}>*</span></label>
             <input 
               type="text" 
-              placeholder="예: hangyeol-7e" 
+              placeholder="예: lastfm_username" 
               value={formData.id}
               onChange={(e) => setFormData({...formData, id: e.target.value})}
               required
@@ -175,7 +175,7 @@ export default function SignUpPage() {
             <label style={{display:"block", marginBottom:"5px", fontSize:"14px", color:"#9ca3af"}}>매장명</label>
             <input 
               type="text" 
-              placeholder="예: 세븐일레븐 대전한결점" 
+              placeholder="예: ㅇㅇ ㅇㅇ점" 
               value={formData.storeName}
               onChange={(e) => setFormData({...formData, storeName: e.target.value})}
               required
