@@ -7,8 +7,14 @@ import {
   query, orderBy, writeBatch 
 } from "firebase/firestore";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import PlaylistManager from "@/components/PlaylistManager";
 
+// 외부 컴포넌트 임포트
+import PlaylistManager from "@/components/PlaylistManager";
+import ManualDataFetcher from "@/components/ManualDataFetcher"; // 🌟 방금 만든 컴포넌트 불러오기!
+
+// ----------------------------------------------------------------------
+// 메인 어드민 설정 페이지
+// ----------------------------------------------------------------------
 export default function AdminSettingsPage() {
   const [activeTab, setActiveTab] = useState("playlist");
 
@@ -16,11 +22,13 @@ export default function AdminSettingsPage() {
     <div style={{ padding: "40px", maxWidth: "1000px", margin: "0 auto" }}>
       <h2 style={{ color: "#444", fontSize: "24px", fontWeight: "bold", marginBottom: "30px" }}>⚙️ 환경 설정</h2>
 
-      <div style={{ display: "flex", gap: "10px", marginBottom: "30px", borderBottom: "1px solid #ddd", paddingBottom: "10px" }}>
+      <div style={{ display: "flex", gap: "10px", marginBottom: "30px", borderBottom: "1px solid #ddd", paddingBottom: "10px", overflowX: "auto" }}>
         <TabButton label="🧑‍🎤 아티스트 관리" isActive={activeTab === "artist"} onClick={() => setActiveTab("artist")} />
         <TabButton label="💰 정산 기준 관리" isActive={activeTab === "settlement"} onClick={() => setActiveTab("settlement")} />
         <TabButton label="🎵 플리 등록" isActive={activeTab === "playlist"} onClick={() => setActiveTab("playlist")} />
         <TabButton label="🔃 노출 순서 관리" isActive={activeTab === "order"} onClick={() => setActiveTab("order")} />
+        {/* 🌟 신규 추가된 수동 데이터 수집 탭 */}
+        <TabButton label="📥 수동 데이터 수집" isActive={activeTab === "manual_fetch"} onClick={() => setActiveTab("manual_fetch")} />
       </div>
 
       <div style={{ background: "white", padding: "30px", borderRadius: "12px", border: "1px solid #eee", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
@@ -28,6 +36,8 @@ export default function AdminSettingsPage() {
         {activeTab === "settlement" && <SettlementManager />}
         {activeTab === "playlist" && <PlaylistManager />}
         {activeTab === "order" && <PlaylistOrderManager />}
+        {/* 🌟 컴포넌트 연결 */}
+        {activeTab === "manual_fetch" && <ManualDataFetcher />}
       </div>
     </div>
   );
@@ -98,11 +108,14 @@ function ArtistManager() {
         <input type="text" placeholder="아티스트 이름" value={newArtist} onChange={(e) => setNewArtist(e.target.value)} style={inputStyle} />
         <button onClick={handleAdd} style={primaryBtnStyle}>+ 추가</button>
       </div>
-      <table style={{ color: "#444", width: "100%", fontSize: "14px" }}>
-        <thead><tr style={{ background: "#f3f4f6" }}><th style={{ padding: "10px" }}>아티스트명</th><th style={{ padding: "10px" }}>관리</th></tr></thead>
+      <table style={{ color: "#444", width: "100%", fontSize: "14px", borderCollapse: "collapse" }}>
+        <thead><tr style={{ background: "#f3f4f6" }}><th style={{ padding: "10px", textAlign: "left" }}>아티스트명</th><th style={{ padding: "10px", textAlign: "center" }}>관리</th></tr></thead>
         <tbody>
           {artists.map((a, i) => (
-            <tr key={i}><td style={{ padding: "10px" }}>{a.name}</td><td style={{ textAlign: "center" }}><button onClick={() => handleDelete(a.name)}>삭제</button></td></tr>
+            <tr key={i} style={{ borderBottom: "1px solid #eee" }}>
+              <td style={{ padding: "10px" }}>{a.name}</td>
+              <td style={{ textAlign: "center" }}><button onClick={() => handleDelete(a.name)} style={{ background: "transparent", color: "red", border: "none", cursor: "pointer" }}>삭제</button></td>
+            </tr>
           ))}
         </tbody>
       </table>
@@ -111,7 +124,7 @@ function ArtistManager() {
 }
 
 // ----------------------------------------------------------------------
-// 2. 💰 정산 기준 관리 (준비 중)
+// 2. 💰 정산 기준 관리
 // ----------------------------------------------------------------------
 function SettlementManager() {
   return (
@@ -120,11 +133,6 @@ function SettlementManager() {
     </div>
   );
 }
-
-// ----------------------------------------------------------------------
-// 3. 💿 플레이리스트 등록 컴포넌트
-// ----------------------------------------------------------------------
-
 
 // ----------------------------------------------------------------------
 // 4. 🔃 플레이리스트 순서 관리 컴포넌트 (Drag & Drop)
@@ -170,7 +178,7 @@ function PlaylistOrderManager() {
     finally { setSaving(false); }
   };
 
-  if (loading) return <div style={{ textAlign: "center", padding: "40px" }}>데이터 로딩 중...</div>;
+  if (loading) return <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>데이터 로딩 중...</div>;
 
   return (
     <div>
@@ -205,7 +213,7 @@ function PlaylistOrderManager() {
                       }}
                     >
                       <div {...provided.dragHandleProps} style={{ cursor: "grab", color: "#999", fontSize: "18px" }}>☰</div>
-                      <img src={item.image} alt="" style={{ width: "40px", height: "40px", borderRadius: "4px", objectFit: "cover" }} />
+                      <img src={item.image} alt="" style={{ width: "40px", height: "40px", borderRadius: "4px", objectFit: "cover", background: "#eee" }} />
                       <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: "bold", fontSize: "14px", color: "#333" }}>{item.title}</div>
                         <div style={{ fontSize: "12px", color: "#888" }}>{item.genre} · {item.industry}</div>
@@ -224,15 +232,14 @@ function PlaylistOrderManager() {
 }
 
 // ----------------------------------------------------------------------
-// 스타일 및 공통 컴포넌트
+// 스타일 및 공통 컴포넌트 (공용)
 // ----------------------------------------------------------------------
-const formLabelStyle = { display: "block", marginBottom: "8px", fontSize: "13px", fontWeight: "600", color: "#4b5563" };
-const inputStyle = { flex: 1, padding: "12px", border: "1px solid #d1d5db", borderRadius: "6px", fontSize: "15px", outline: "none", width: "100%" };
-const primaryBtnStyle = { background: "#3b82f6", color: "white", border: "none", padding: "10px 24px", borderRadius: "6px", cursor: "pointer", fontWeight: "bold", fontSize: "15px" };
+const inputStyle = { flex: 1, padding: "12px", border: "1px solid #d1d5db", borderRadius: "6px", fontSize: "15px", outline: "none", width: "100%", boxSizing: "border-box" as const };
+const primaryBtnStyle = { background: "#3b82f6", color: "white", border: "none", padding: "10px 24px", borderRadius: "6px", cursor: "pointer", fontWeight: "bold", fontSize: "15px", transition: "background 0.2s" };
 
 function TabButton({ label, isActive, onClick }: any) {
   return (
-    <button onClick={onClick} style={{ padding: "10px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: "15px", background: isActive ? "#1f2937" : "transparent", color: isActive ? "white" : "#6b7280", transition: "all 0.2s" }}>
+    <button onClick={onClick} style={{ padding: "10px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: "15px", background: isActive ? "#1f2937" : "transparent", color: isActive ? "white" : "#6b7280", transition: "all 0.2s", whiteSpace: "nowrap" }}>
       {label}
     </button>
   );
