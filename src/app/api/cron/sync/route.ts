@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebase-admin";
 import * as admin from "firebase-admin";
+import { KST_OFFSET, DAILY_MAX_COUNT } from "@/lib/stats-constants";
 
 export async function GET(request: Request) {
   console.log("🚀 Cron Job 시작: syncMissingData 로직 완전 이식");
 
   try {
     // 1. KST 기준 어제 날짜 구하기
-    const KST_OFFSET = 9 * 60 * 60 * 1000;
     const now = new Date();
     // 서버 시간을 KST로 변환 후 '어제' 날짜 문자열 추출
     const todayKst = new Date(now.getTime() + KST_OFFSET);
@@ -87,7 +87,6 @@ export async function GET(request: Request) {
 
     // 6. 데이터 가공 (DAILY_MAX_COUNT = 10)
     const finalStats: any[] = [];
-    const DAILY_MAX_COUNT = 10;
 
     Object.values(userDailyStats).forEach((dailyUser: any) => {
       let validPlays = 0;

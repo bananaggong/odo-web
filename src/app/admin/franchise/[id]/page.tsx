@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { calculateRevenue } from "@/lib/revenue";
+import { formatYMD, getDatesInRange, getDefaultDateRange } from "@/lib/date-utils";
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend 
 } from 'recharts';
@@ -22,21 +24,7 @@ export default function FranchiseDetailPage() {
   const franchiseName = franchiseId === 'seveneleven' ? '세븐일레븐' : '개인/기타';
   const themeColor = franchiseId === 'seveneleven' ? '#008060' : '#6366f1';
 
-  const formatYMD = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-
-  const [dateRange, setDateRange] = useState({
-    start: formatYMD(new Date(today.getFullYear(), today.getMonth(), 1)), 
-    end: formatYMD(yesterday)
-  });
+  const [dateRange, setDateRange] = useState(getDefaultDateRange);
 
   const [summary, setSummary] = useState({ totalRevenue: 0, totalPlays: 0, activeStores: 0 });
   const [chartData, setChartData] = useState<any[]>([]);
@@ -79,31 +67,9 @@ export default function FranchiseDetailPage() {
     store.id.toLowerCase().includes(filterKeyword.toLowerCase())
   );
 
-  const calculateRevenue = (plays: number) => {
-    let maxRevenue = 30000;
-    if (franchiseId === 'seveneleven') maxRevenue = 22000;
-    if (plays < 2500) return 0;
-    else if (plays < 5000) return Math.floor(maxRevenue / 3);
-    else if (plays < 7500) return Math.floor((maxRevenue * 2) / 3);
-    else return maxRevenue;
-  };
-
   useEffect(() => {
     fetchDetailData();
   }, [dateRange]);
-
-  const getDatesInRange = (startDate: Date, endDate: Date) => {
-    const dates = [];
-    const theDate = new Date(startDate);
-    const end = new Date(endDate);
-    while (theDate <= end) {
-      const offset = new Date().getTimezoneOffset() * 60000;
-      const dateStr = new Date(theDate.getTime() - offset).toISOString().split('T')[0];
-      dates.push(dateStr);
-      theDate.setDate(theDate.getDate() + 1);
-    }
-    return dates;
-  };
 
   const fetchDetailData = async () => {
     setLoading(true);
@@ -142,7 +108,7 @@ export default function FranchiseDetailPage() {
 
       const finalStoreList = Object.keys(userAggregates).map(uid => {
         const totalPlays = userAggregates[uid];
-        const revenue = calculateRevenue(totalPlays);
+        const revenue = calculateRevenue(franchiseId, totalPlays);
         grandTotalRevenue += revenue;
         grandTotalPlays += totalPlays;
         return {

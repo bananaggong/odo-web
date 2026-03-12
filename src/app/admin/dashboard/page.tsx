@@ -6,6 +6,9 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where, doc, writeBatch, Timestamp } from "firebase/firestore";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import * as XLSX from 'xlsx';
+import { calculateRevenue } from "@/lib/revenue";
+import { formatYMD, getDatesInRange, getDefaultDateRange } from "@/lib/date-utils";
+import { KST_OFFSET, DAILY_MAX_COUNT } from "@/lib/stats-constants";
 
 export default function AdminDashboardPage() {
   const router = useRouter(); 
@@ -15,13 +18,6 @@ export default function AdminDashboardPage() {
   const [searchTerm, setSearchTerm] = useState("");      
   const [filterKeyword, setFilterKeyword] = useState(""); 
 
-  const formatYMD = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
   const [stats, setStats] = useState({
     users: 0, newUsers: 0, plays: 0, prevPlays: 0, revenue: 0, prevRevenue: 0
   });
@@ -29,14 +25,7 @@ export default function AdminDashboardPage() {
   const [chartData, setChartData] = useState<any[]>([]);
   const [userList, setUserList] = useState<any[]>([]);
 
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-
-  const [dateRange, setDateRange] = useState({
-    start: formatYMD(new Date(today.getFullYear(), today.getMonth(), 1)), 
-    end: formatYMD(yesterday)
-  });
+  const [dateRange, setDateRange] = useState(getDefaultDateRange);
 
   useEffect(() => {
     fetchRealData();
@@ -85,27 +74,6 @@ export default function AdminDashboardPage() {
       link.click();
       document.body.removeChild(link);
     }
-  };
-
-  const calculateRevenue = (franchise: string, plays: number) => {
-    const revenueTable = franchise === 'seveneleven' ? [0, 7300, 14300, 22000] : [0, 10000, 20000, 30000];
-    if (plays < 2500) return revenueTable[0];
-    else if (plays < 5000) return revenueTable[1];
-    else if (plays < 7500) return revenueTable[2];
-    else return revenueTable[3];
-  };
-
-  const getDatesInRange = (startDate: Date, endDate: Date) => {
-    const dates = [];
-    const theDate = new Date(startDate);
-    const end = new Date(endDate);
-    while (theDate <= end) {
-      const offset = new Date().getTimezoneOffset() * 60000;
-      const dateStr = new Date(theDate.getTime() - offset).toISOString().split('T')[0];
-      dates.push(dateStr);
-      theDate.setDate(theDate.getDate() + 1);
-    }
-    return dates;
   };
 
   const fetchRealData = async (forceUpdate = false) => {
@@ -273,7 +241,6 @@ export default function AdminDashboardPage() {
       });
 
       const userDailyStats: Record<string, any> = {};
-      const KST_OFFSET = 9 * 60 * 60 * 1000; 
 
       uniqueRecords.forEach((record) => {
           if (!record.artist) return;
@@ -291,7 +258,6 @@ export default function AdminDashboardPage() {
           userDailyStats[userKey].trackCounts[trackKey] = (userDailyStats[userKey].trackCounts[trackKey] || 0) + 1;
       });
 
-      const DAILY_MAX_COUNT = 10; 
       const finalStats: any[] = [];
 
       Object.values(userDailyStats).forEach((dailyUser: any) => {

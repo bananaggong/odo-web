@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { calculateRevenue } from "@/lib/revenue";
+import { formatYMD, getDefaultDateRange } from "@/lib/date-utils";
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, 
   PieChart, Pie, Cell 
@@ -17,33 +19,10 @@ export default function FranchiseStatsPage() {
   const [searchTerm, setSearchTerm] = useState("");      
   const [filterKeyword, setFilterKeyword] = useState(""); 
 
-  const formatYMD = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-
-  const [dateRange, setDateRange] = useState({
-    start: formatYMD(new Date(today.getFullYear(), today.getMonth(), 1)), 
-    end: formatYMD(yesterday)
-  });
+  const [dateRange, setDateRange] = useState(getDefaultDateRange);
 
   const [franchiseData, setFranchiseData] = useState<any[]>([]);
   const [totalStats, setTotalStats] = useState({ revenue: 0, plays: 0, stores: 0 });
-
-  const calculateRevenue = (franchise: string, plays: number) => {
-    let maxRevenue = 30000; 
-    if (franchise === 'seveneleven') maxRevenue = 22000;
-    if (plays < 2500) return 0;
-    else if (plays < 5000) return Math.floor(maxRevenue / 3);
-    else if (plays < 7500) return Math.floor((maxRevenue * 2) / 3);
-    else return maxRevenue;
-  };
 
   useEffect(() => {
     fetchFranchiseData();

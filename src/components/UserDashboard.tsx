@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, writeBatch, doc, Timestamp, getDoc } from "firebase/firestore";
+import { calculateRevenue, GOAL_PLAYS } from "@/lib/revenue";
+import { formatYMD, getDatesInRange, getDefaultDateRange } from "@/lib/date-utils";
+import { KST_OFFSET, DAILY_MAX_COUNT } from "@/lib/stats-constants";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 // ✅ 인증 관련 훅 및 파이어베이스 탈퇴 함수 추가
@@ -32,31 +35,7 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
   
   const [chartData, setChartData] = useState<any[]>([]);
 
-  const formatYMD = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-
-  const [dateRange, setDateRange] = useState({
-    start: formatYMD(new Date(today.getFullYear(), today.getMonth(), 1)), 
-    end: formatYMD(yesterday)
-  });
-
-  const calculateRevenue = (franchise: string, plays: number) => {
-    let maxRevenue = 30000;
-    if (franchise === 'seveneleven') maxRevenue = 22000;
-
-    if (plays < 2500) return 0;
-    else if (plays < 5000) return Math.floor(maxRevenue / 3);
-    else if (plays < 7500) return Math.floor((maxRevenue * 2) / 3);
-    else return maxRevenue;
-  };
+  const [dateRange, setDateRange] = useState(getDefaultDateRange);
 
   useEffect(() => {
     async function initData() {
@@ -97,21 +76,6 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
     }
     initData();
   }, [targetId, isAdmin]);
-
-  const getDatesInRange = (startDate: Date, endDate: Date) => {
-    const dates = [];
-    const theDate = new Date(startDate);
-    theDate.setHours(0,0,0,0);
-    const end = new Date(endDate);
-    end.setHours(0,0,0,0);
-    while (theDate <= end) {
-      const offset = new Date().getTimezoneOffset() * 60000;
-      const dateStr = new Date(theDate.getTime() - offset).toISOString().split('T')[0];
-      dates.push(dateStr);
-      theDate.setDate(theDate.getDate() + 1);
-    }
-    return dates;
-  };
 
   const fetchDashboardData = async (lastfmId: string, startStr: string, endStr: string, franchise: string) => {
     setLoading(true);
@@ -176,7 +140,7 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
         }));
 
         const estimatedRevenue = calculateRevenue(franchise || 'personal', totalCount);
-        const achievementRate = Math.min((totalCount / 7500) * 100, 100);
+        const achievementRate = Math.min((totalCount / GOAL_PLAYS) * 100, 100);
 
         let growthRate = 0;
         let hasPrevData = false; 
@@ -243,7 +207,6 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
           });
 
           const userDailyStats: Record<string, Record<string, number>> = {};
-          const KST_OFFSET = 9 * 60 * 60 * 1000;
 
           uniqueRecords.forEach((record) => {
               if (!record.artist) return;
@@ -258,7 +221,6 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
               userDailyStats[dateStr][trackKey] = (userDailyStats[dateStr][trackKey] || 0) + 1;
           });
 
-          const DAILY_MAX_COUNT = 10;
           const finalStats: any[] = [];
 
           Object.entries(userDailyStats).forEach(([date, trackCounts]) => {
