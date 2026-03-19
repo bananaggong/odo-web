@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/projects/odo-web -type f -name *.json -o -name *.config.* -o -name README* -o -name .env*)",
+      "Bash(wc -l /c/projects/odo-web/src/components/*.tsx)",
+      "Bash(npm run:*)",
+      "WebFetch(domain:localhost)",
+      "WebFetch(domain:www.easyshop.co.kr)"
+    ]
+  }
+}
