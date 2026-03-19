@@ -1,0 +1,210 @@
+/* EasyshopHeader.module.css */
+
+.headerWrap {
+  --header-h: 73px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
+  will-change: transform;
+}
+
+.headerBar {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #E5E5E5;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+/* 스크롤 시 그림자 */
+.scrolled .headerBar {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background-color: rgba(255, 255, 255, 0.97);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-h);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  gap: 20px;
+}
+
+/* ===== BRAND ===== */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.brandEs {
+  font-size: 18px;
+  font-weight: 900;
+  color: #2DAA4F;
+  letter-spacing: -0.3px;
+}
+
+.brandSep {
+  font-size: 14px;
+  font-weight: 400;
+  color: #BBBBBB;
+}
+
+.brandOdo {
+  font-size: 18px;
+  font-weight: 900;
+  color: #1A1A1A;
+  letter-spacing: -0.3px;
+}
+
+/* ===== PC NAV ===== */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.nav a {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #4A4A4A;
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav a:hover {
+  color: #2DAA4F;
+  background: #F4F9F1;
+}
+
+/* ===== RIGHT ===== */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 12px;
+}
+
+/* Secondary CTA: 골드 버튼 */
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  background: #F5C842;
+  color: #1A1A1A;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: box-shadow 0.15s, transform 0.1s;
+  box-shadow: 0 4px 12px rgba(245, 200, 66, 0.4);
+}
+
+.ctaBtn:hover {
+  box-shadow: 0 6px 18px rgba(245, 200, 66, 0.55);
+  transform: translateY(-1px);
+}
+
+/* ===== HAMBURGER ===== */
+.hamburger {
+  display: none;
+  background: #F4F9F1;
+  border: 1px solid #E0E0E0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #2DAA4F;
+}
+
+/* ===== MOBILE PANEL ===== */
+.mobileDim {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.mobilePanel {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  top: calc(var(--header-h) + 8px);
+  z-index: 1200;
+  background: #fff;
+  border: 1px solid #E5E5E5;
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mobilePanel a {
+  display: block;
+  padding: 13px 16px;
+  border-radius: 10px;
+  color: #1A1A1A;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.mobilePanel a:hover {
+  background: #F4F9F1;
+  color: #2DAA4F;
+}
+
+.mobileDivider {
+  border: none;
+  border-top: 1px solid #E5E5E5;
+  margin: 8px 0;
+}
+
+.mobileCta {
+  background: #F5C842 !important;
+  color: #1A1A1A !important;
+  text-align: center;
+  border-radius: 10px !important;
+}
+
+.mobileCta:hover {
+  background: #e8bb3a !important;
+}
+
+/* ===== STATES ===== */
+.headerHidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 820px) {
+  .nav,
+  .ctaBtn {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .inner {
+    padding: 0 16px;
+  }
+}
