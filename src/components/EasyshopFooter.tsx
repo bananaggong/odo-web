@@ -9,7 +9,7 @@ export default function EasyshopFooter() {
         {/* 상단: 로고 + 링크 */}
         <div className={styles.top}>
           <div className={styles.brand}>
-            <span className={styles.brandEs}>이지샵</span>
+            <span className={styles.brandEs}>EASYSHOP</span>
             <span className={styles.brandSep}>×</span>
             <span className={styles.brandOdo}>ODO</span>
           </div>

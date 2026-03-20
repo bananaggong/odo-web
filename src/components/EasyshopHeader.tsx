@@ -40,7 +40,7 @@ export default function EasyshopHeader() {
         <div className={styles.inner}>
           {/* 로고 */}
           <Link className={styles.brand} href="/landing/easyshop">
-            <span className={styles.brandEs}>이지샵</span>
+            <span className={styles.brandEs}>EASYSHOP</span>
             <span className={styles.brandSep}>×</span>
             <span className={styles.brandOdo}>ODO</span>
           </Link>

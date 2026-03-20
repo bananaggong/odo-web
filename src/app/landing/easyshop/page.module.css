@@ -14,9 +14,9 @@
   overflow-y: hidden;
 }
 
-.stageScroll::-webkit-scrollbar { height: 10px; }
-.stageScroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,.12); border-radius: 999px; }
-.stageScroll::-webkit-scrollbar-track { background: rgba(0,0,0,.05); }
+.stageScroll::-webkit-scrollbar { height: 0; }
+.stageScroll::-webkit-scrollbar-thumb { background: transparent; }
+.stageScroll::-webkit-scrollbar-track { background: transparent; }
 
 /* ===== HERO ===== */
 .heroSection { padding-top: 40px; }
@@ -24,24 +24,100 @@
 .heroCard {
   position: relative;
   overflow: hidden;
-  border-radius: 16px;
-  border: 1px solid #E0E0E0;
-  background: #F4F9F1;
+  border-radius: 0;
+  border: none;
+  background: #1a3a2a;
+  aspect-ratio: 16 / 7;
+  min-height: 260px;
+  margin: -16px -16px 0;
 }
 
 .heroImg {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  background: #F4F9F1;
   display: block;
 }
 
 .heroDim {
   position: absolute;
   inset: 0;
-  background: rgba(45, 170, 79, 0.06);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(20px, 3.5vw, 52px) clamp(20px, 3.5vw, 52px) clamp(20px, 3.5vw, 52px) clamp(24px, 18vw, 300px);
+  background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.25) 55%, transparent 100%);
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 14px;
+  width: fit-content;
+  backdrop-filter: blur(4px);
+}
+
+.heroHeadline {
+  margin: 0 0 10px;
+  font-size: clamp(24px, 3.8vw, 52px);
+  font-weight: 900;
+  line-height: 1.15;
+  color: #FFFFFF;
+  letter-spacing: -0.5px;
+}
+
+.heroSub {
+  margin: 0 0 24px;
+  font-size: clamp(12px, 1.3vw, 17px);
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.65;
+}
+
+.heroCtas {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.heroCtaYellow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFDD33;
+  border-radius: 10px;
+  padding: 0 22px;
+  height: 46px;
+  font-size: clamp(13px, 1.2vw, 15px);
+  font-weight: 700;
+  color: #1A1A1A;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.heroCtaText {
+  font-size: clamp(12px, 1.1vw, 14px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 /* ===== STATEMENT ===== */
@@ -122,11 +198,31 @@
 }
 
 .benefitGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: center;
+  gap: clamp(24px, 14vw, 180px);
+  flex-wrap: wrap;
+}
+
+.benefitItem {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-items: center;
-  gap: clamp(28px, 6vw, 116px);
+  gap: 16px;
+}
+
+.benefitImg {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.benefitLabel {
+  margin: 0;
+  font-size: clamp(14px, 1.5vw, 17px);
+  font-weight: 700;
+  color: #1A1A1A;
+  text-align: center;
 }
 
 /* ===== Problem ===== */
@@ -174,8 +270,8 @@
 .closing {
   padding-top: clamp(56px, 5vw, 80px);
   text-align: center;
-  font-size: clamp(18px, 2.1vw, 25px);
-  font-weight: 800;
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 900;
   color: #1A1A1A;
   margin-bottom: clamp(32px, 4vw, 56px);
 }
@@ -355,22 +451,17 @@
   position: relative;
   max-width: 720px;
   margin: 0 auto;
-  padding: 20px 20px 0;
+  padding: 0 20px;
 }
 
-.ctaCardPill {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #FFDD33;
-  border-radius: 100px;
-  padding: 8px 20px;
-  font-size: 14px;
-  font-weight: 700;
+.ctaHeading {
+  margin: 0 0 36px;
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 900;
+  line-height: 1.3;
   color: #1A1A1A;
-  white-space: nowrap;
-  z-index: 1;
+  text-align: center;
+  letter-spacing: -0.5px;
 }
 
 .ctaCardGrid {
@@ -405,7 +496,7 @@
 }
 
 .ctaCardText {
-  font-size: 16px;
+  font-size: clamp(14px, 1.8vw, 16px);
   font-weight: 700;
   color: #1A1A1A;
   text-align: center;
@@ -445,7 +536,7 @@
 
 .ctaCardSub {
   margin: 8px 0 0;
-  font-size: 11px;
+  font-size: clamp(12px, 1.2vw, 13px);
   color: #888888;
   line-height: 1.6;
 }
@@ -526,26 +617,44 @@
 }
 
 .stepCard {
-  padding: 18px;
+  padding: 20px;
   border-radius: 14px;
   background: #fff;
   border: 1px solid #E5E5E5;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stepCardBody {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.stepCardImg {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .stepNo {
-  font-size: 12px;
+  font-size: 24px;
   letter-spacing: 0.2px;
   font-weight: 800;
   color: #2DAA4F;
-  margin-bottom: 6px;
+  margin-bottom: 0;
 }
 
 .stepTitle {
   font-weight: 900;
   color: #1A1A1A;
-  font-size: clamp(14px, 1.7vw, 17px);
-  line-height: 1.25;
+  font-size: clamp(18px, 2.2vw, 22px);
+  line-height: 1.3;
   margin-bottom: 6px;
 }
 
@@ -599,9 +708,15 @@
   gap: 3px;
 }
 
+@media (max-width: 600px) {
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .featureCell {
   background: #ffffff;
-  padding: 80px 64px;
+  padding: clamp(32px, 6vw, 80px) clamp(20px, 5vw, 64px);
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -610,7 +725,7 @@
 
 .featureCellNum {
   align-self: flex-start;
-  font-size: 48px;
+  font-size: clamp(32px, 4vw, 48px);
   font-weight: 900;
   color: #2DAA4F;
   line-height: 1;

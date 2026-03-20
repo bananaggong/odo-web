@@ -3,10 +3,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
 import styles from "./page.module.css";
+import YouTubeSection from "./YouTubeSection";
 
 export const metadata: Metadata = {
-  title: "ODO | Easyshop",
-  description: "이지샵 사업자를 위한 매장 음악 혜택 서비스",
+  title: "ODO | EASYSHOP",
+  description: "EASYSHOP 사업자를 위한 매장 음악 혜택 서비스",
 };
 
 function PillBox({ children }: { children: React.ReactNode }) {
@@ -32,6 +33,20 @@ export default function EasyshopLandingPage() {
               />
               <div className={styles.heroDim} />
             </div>
+            <div className={styles.heroOverlay}>
+              <h1 className={styles.heroHeadline}>
+                매장 음악이<br /><span className={styles.accent}>포인트</span>가 됩니다
+              </h1>
+              <p className={styles.heroSub}>
+                ODO 플레이리스트를 재생하면<br />
+                들은 만큼 포인트로 돌아옵니다
+              </p>
+              <div className={styles.heroCtas}>
+                <a className={styles.heroCtaYellow} href="#cta">
+                  포인트 받으러가기
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* STATEMENT */}
@@ -51,19 +66,16 @@ export default function EasyshopLandingPage() {
                 </p>
               </div>
             </div>
-          <div className={styles.pillStage}>
-            <span className={`${styles.pillsm} ${styles.p1}`}>매장 전용</span>
-            <span className={`${styles.pillsm} ${styles.p2}`}>광고 없음</span>
-            <span className={`${styles.pillsm} ${styles.p3}`}>저작권 클리어</span>
-          </div>
-            {/* 혜택 Pills */}
+            {/* 혜택 블록 */}
             <div className={styles.benefitWrap}>
               <div className={styles.benefitGrid}>
-                <div className={styles.benefitLeft}>
-                  <PillBox>월 최대 3만원 상당 혜택</PillBox>
+                <div className={styles.benefitItem}>
+                  <img src="/images/landing-point.png" alt="" className={styles.benefitImg} />
+                  <p className={styles.benefitLabel}>월 최대 3만원 상당 혜택</p>
                 </div>
-                <div className={styles.benefitRight}>
-                  <PillBox>추가 비용 없음</PillBox>
+                <div className={styles.benefitItem}>
+                  <img src="/images/lading-no.png" alt="" className={styles.benefitImg} />
+                  <p className={styles.benefitLabel}>추가 비용 없음</p>
                 </div>
               </div>
 
@@ -87,6 +99,7 @@ export default function EasyshopLandingPage() {
                       <div className={styles.featureCell}>
                         <span className={styles.featureCellNum}>3</span>
                         <p className={styles.featureCellTitle}>매장에서 음악을 재생한 만큼 정산금을 지급받습니다.</p>
+                        <p className={styles.featureCellDesc}>※ 재생 기록을 집계하는 Last.fm 연동은 무료 서비스입니다.</p>
                       </div>
                       <div className={styles.featureCell}>
                         <span className={styles.featureCellNum}>4</span>
@@ -98,22 +111,7 @@ export default function EasyshopLandingPage() {
               </div>
           </section>
 
-          {/* YouTube 섹션 */}
-          <section className={styles.heroSection} id="hero">
-            <div className={styles.closing}>이런 음악이 매장에서 재생됩니다</div>
-            <div className={styles.statementStage}>
-              <div className={styles.ytEmbed}>
-                <div className={styles.ytRatio}>
-                  <iframe
-                    src="https://www.youtube.com/embed/ntVJYQtyQ0s?rel=0"
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
+          <YouTubeSection />
 
 
 
@@ -134,18 +132,26 @@ export default function EasyshopLandingPage() {
                 <div className={styles.stepLeftCol}>
                   <div className={styles.stepCard}>
                     <div className={styles.stepNo}>STEP 1</div>
-                    <div className={styles.stepTitle}>YouTube Music 준비</div>
-                    
+                    <div className={styles.stepCardBody}>
+                      <img src="/images/youtubemusic.png" alt="YouTube Music" className={styles.stepCardImg} />
+                      <div className={styles.stepTitle}>YouTube Music 준비</div>
+                    </div>
                   </div>
 
                   <div className={styles.stepCard}>
                     <div className={styles.stepNo}>STEP 2</div>
-                    <div className={styles.stepTitle}>최초 1회 설정 (Last.fm 연동)</div>
+                    <div className={styles.stepCardBody}>
+                      <img src="/images/lastfmclay.png" alt="Last.fm 연동" className={styles.stepCardImg} />
+                      <div className={styles.stepTitle}>최초 1회 설정 (Last.fm 연동)</div>
+                    </div>
                   </div>
 
                   <div className={styles.stepCard}>
                     <div className={styles.stepNo}>STEP 3</div>
-                    <div className={styles.stepTitle}>플레이리스트 재생</div>
+                    <div className={styles.stepCardBody}>
+                      <img src="/images/playlistclay.png" alt="플레이리스트 재생" className={styles.stepCardImg} />
+                      <div className={styles.stepTitle}>플레이리스트 재생</div>
+                    </div>
                   </div>
                 </div>
 
@@ -191,6 +197,16 @@ export default function EasyshopLandingPage() {
                   </div>
                   <p className={styles.faqAText}>월 최대 약 3만원 수준입니다.</p>
                 </article>
+
+                <article className={styles.faqCard}>
+                  <div className={styles.faqQRow}>
+                    <span className={styles.faqQ}>Q.</span>
+                    <h3 className={styles.faqQText}>설정이 어렵지 않나요?</h3>
+                  </div>
+                  <p className={styles.faqAText}>
+                    처음 한 번만 크롬 확장 프로그램을 설치하면 이후에는 별도 조작 없이 자동으로 작동합니다. 설치 시간은 5분 이내입니다.
+                  </p>
+                </article>
               </div>
 
               <div className={styles.faqCtaRow}>
@@ -204,7 +220,11 @@ export default function EasyshopLandingPage() {
           {/* CTA 카드 섹션 */}
           <section className={styles.ctaCardSection}>
             <div className={styles.ctaCardOuter}>
-              <span className={styles.ctaCardPill}>지금 어떤 상황이세요?</span>
+              <h2 className={styles.ctaHeading}>
+                YouTube Music 구독 여부에 따라<br />
+                바로 시작할 수 있습니다
+              </h2>
+
               <div className={styles.ctaCardGrid}>
                 {/* 카드 1: 미해당 */}
                 <div className={styles.ctaCard}>
@@ -238,30 +258,6 @@ export default function EasyshopLandingPage() {
               </div>
             </div>
           </section>
-
-          <div className={styles.statementStage}>
-            <div className={styles.statementInner}>
-              <h2 className={styles.h2}>
-                매장 음악을
-                <br />
-                불편 없이 정리하고
-                <br />
-                틀어준 만큼 돌려받으세요
-              </h2>
-            </div>
-          </div>
-
-          <div id="cta" style={{ height: 1 }} />
-          <div className={styles.applyCtaRow}>
-            <a
-              className={styles.applyBtn}
-              href="https://docs.google.com/forms/d/e/1FAIpQLSf0yLS-x-d6LwdpYxA4G2k3V6xDYsAQR_rU13lNxZSwybKD6g/viewform"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ODO 무료로 시작하기
-            </a>
-          </div>
         </main>
       </div>
     </div>

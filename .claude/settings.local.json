@@ -5,7 +5,17 @@
       "Bash(wc -l /c/projects/odo-web/src/components/*.tsx)",
       "Bash(npm run:*)",
       "WebFetch(domain:localhost)",
-      "WebFetch(domain:www.easyshop.co.kr)"
+      "WebFetch(domain:www.easyshop.co.kr)",
+      "Bash(npm install:*)",
+      "Bash(vercel --version)",
+      "Bash(vercel whoami:*)",
+      "Bash(vercel --yes)",
+      "Bash(vercel env:*)",
+      "Bash(vercel --prod)",
+      "Bash(node -e \":*)",
+      "Bash(mkdir -p C:/Temp)",
+      "Bash(printf '%s' \"6Ldh-nUsAAAAAOjcpcEVUJ4VddiIkcHDdEVX5jdd\")",
+      "Bash(grep:*)"
     ]
   }
 }
