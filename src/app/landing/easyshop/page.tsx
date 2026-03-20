@@ -135,19 +135,12 @@ export default function EasyshopLandingPage() {
                   <div className={styles.stepCard}>
                     <div className={styles.stepNo}>STEP 1</div>
                     <div className={styles.stepTitle}>YouTube Music 준비</div>
-                    <p className={styles.stepDesc}>
-                      ODO 플레이리스트는 YouTube Music으로 재생됩니다.
-                      개인·매장 계정 모두 가능하며 별도 기기 구매는 불필요합니다.
-                    </p>
+                    
                   </div>
 
                   <div className={styles.stepCard}>
                     <div className={styles.stepNo}>STEP 2</div>
                     <div className={styles.stepTitle}>최초 1회 설정 (Last.fm 연동)</div>
-                    <p className={styles.stepDesc}>
-                      크롬 확장 프로그램을 최초 1회 설치하면 이후 조작 없이 자동 작동합니다.
-                      재생 이력이 ODO 정산의 기준 자료로 활용됩니다.
-                    </p>
                   </div>
 
                   <div className={styles.stepCard}>
@@ -204,6 +197,44 @@ export default function EasyshopLandingPage() {
                 <Link className={styles.faqBtn} href="/howto">
                   FAQ 더 보기
                 </Link>
+              </div>
+            </div>
+          </section>
+
+          {/* CTA 카드 섹션 */}
+          <section className={styles.ctaCardSection}>
+            <div className={styles.ctaCardOuter}>
+              <span className={styles.ctaCardPill}>지금 어떤 상황이세요?</span>
+              <div className={styles.ctaCardGrid}>
+                {/* 카드 1: 미해당 */}
+                <div className={styles.ctaCard}>
+                  <span className={styles.ctaCardEmoji}>🛒</span>
+                  <p className={styles.ctaCardText}>"아직 이지샵 회원이 아니에요"</p>
+                  <a
+                    className={styles.ctaCardBtnYellow}
+                    href="https://www.easyshop.co.kr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    이지샵 가입하러 가기
+                  </a>
+                  <p className={styles.ctaCardSub}>* 이지샵 가입 후 ODO 신청까지 5분이면 충분해요</p>
+                  <p className={styles.ctaCardSub}>* 이지샵 회원은 ODO를 무료로 이용할 수 있어요</p>
+                </div>
+
+                {/* 카드 2: 해당 */}
+                <div className={styles.ctaCard}>
+                  <span className={styles.ctaCardEmoji}>🎵</span>
+                  <p className={styles.ctaCardText}>"이미 이지샵 회원이에요"</p>
+                  <a
+                    className={styles.ctaCardBtnGreen}
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSf0yLS-x-d6LwdpYxA4G2k3V6xDYsAQR_rU13lNxZSwybKD6g/viewform"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ODO 무료로 시작하기
+                  </a>
+                </div>
               </div>
             </div>
           </section>

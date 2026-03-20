@@ -46,7 +46,7 @@
 
 /* ===== STATEMENT ===== */
 .statementSection {
-  padding: clamp(56px, 6vw, 96px) 0;
+  padding: clamp(36px, 4vw, 56px) 0;
 }
 
 .statementStage {
@@ -59,13 +59,13 @@
 
 .statementInner {
   width: 100%;
-  max-width: 720px;
+  max-width: 560px;
   text-align: center;
 }
 
 .h2 {
   margin: 0;
-  font-size: clamp(28px, 3vw, 36px);
+  font-size: clamp(32px, 3.5vw, 42px);
   line-height: 1.25;
   font-weight: 900;
   letter-spacing: -0.6px;
@@ -209,13 +209,13 @@
 }
 
 .pillStage {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(6px, 1.3vw, 24px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 80px;
   align-items: center;
-  justify-items: center;
-  margin-top: 28px;
-  height: 90px;
+  justify-content: center;
+  max-width: 660px;
+  margin: 28px auto 0;
 }
 
 /* 줄바꿈 제어 */
@@ -346,6 +346,110 @@
 }
 
 /* ===== CTA ===== */
+/* ===== CTA 카드 섹션 ===== */
+.ctaCardSection {
+  padding: clamp(48px, 6vw, 80px) 0 clamp(32px, 4vw, 56px);
+}
+
+.ctaCardOuter {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 20px 0;
+}
+
+.ctaCardPill {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #FFDD33;
+  border-radius: 100px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1A1A1A;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.ctaCardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding-top: 20px;
+}
+
+@media (min-width: 768px) {
+  .ctaCardGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.ctaCard {
+  position: relative;
+  background: #FFFFFF;
+  border: 1.5px solid #E0E0E0;
+  border-radius: 16px;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ctaCardEmoji {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.ctaCardText {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1A1A1A;
+  text-align: center;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+.ctaCardBtnYellow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFDD33;
+  border: none;
+  border-radius: 10px;
+  height: 54px;
+  font-weight: 700;
+  font-size: 16px;
+  color: #1A1A1A;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.ctaCardBtnGreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #39A628;
+  border: none;
+  border-radius: 10px;
+  height: 54px;
+  font-weight: 700;
+  font-size: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.ctaCardSub {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: #888888;
+  line-height: 1.6;
+}
+
 .applyCtaRow {
   margin-top: 18px;
   margin-bottom: clamp(48px, 7vw, 80px);
@@ -382,7 +486,7 @@
 }
 
 .stepContainer {
-  width: min(720px, calc(100% - 32px));
+  width: min(80%, 1280px);
   margin: 0 auto;
 }
 
