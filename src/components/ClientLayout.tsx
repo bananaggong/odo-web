@@ -12,12 +12,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   const isAdmin = pathname?.startsWith("/admin");
   const isEasyshop = pathname === "/landing/easyshop";
+  const isEasyshop2 = pathname === "/landing/easyshop2";
 
   if (isAdmin) {
     return <>{children}</>;
   }
 
-  if (isEasyshop) {
+  if (isEasyshop || isEasyshop2) {
     return (
       <>
         <EasyshopHeader />

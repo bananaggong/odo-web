@@ -5,7 +5,7 @@ import React from "react";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "ODO | 이지샵 파트너",
+  title: "ODO | Easyshop",
   description: "이지샵 사업자를 위한 매장 음악 혜택 서비스",
 };
 
@@ -26,7 +26,7 @@ export default function EasyshopLandingPage() {
           <div className={styles.heroCard}>
             <div className={styles.heroMedia}>
               <img
-                src="/images/landing.jpg"
+                src="/images/pos-hero.png"
                 alt="hero"
                 className={styles.heroImg}
               />
@@ -39,21 +39,23 @@ export default function EasyshopLandingPage() {
             <div className={styles.statementStage}>
               <div className={styles.statementInner}>
                 <h2 className={styles.h2}>
-                  이지샵 사업자라면
+                  ODO는 매장 음악을
                   <br />
-                  음악을 틀 때마다
+                  무료로 제공하면서도
                   <br />
-                  <span className={styles.accent}>혜택이 적립됩니다</span>
+                  <span className={styles.accent}>듣는만큼 환급</span>해드립니다.
                 </h2>
 
                 <p className={styles.desc}>
-                  추가 비용 없이, 이지샵 회원 전용으로
                   <br />
-                  월 최대 3만원 상당 혜택을 받을 수 있습니다.
                 </p>
               </div>
             </div>
-
+          <div className={styles.pillStage}>
+            <span className={`${styles.pillsm} ${styles.p1}`}>매장 전용</span>
+            <span className={`${styles.pillsm} ${styles.p2}`}>광고 없음</span>
+            <span className={`${styles.pillsm} ${styles.p3}`}>저작권 클리어</span>
+          </div>
             {/* 혜택 Pills */}
             <div className={styles.benefitWrap}>
               <div className={styles.benefitGrid}>
@@ -67,29 +69,33 @@ export default function EasyshopLandingPage() {
 
               <div className={styles.spacer} />
 
-              {/* 불편 포인트 */}
-              <div className={styles.problemGrid}>
-                <div className={styles.problemTitle}>
-                  <h3 className={styles.h3}>
-                    매장 음악,
-                    <br />
-                    사실 이런 점이{" "}
-                    <span className={styles.br} aria-hidden="true">
-                      <br />
-                    </span>
-                    불편했습니다.
-                  </h3>
-                </div>
-
-                <ul className={styles.problemList}>
-                  <li>매장에서 틀어도 되는지 늘 애매한 음악</li>
-                  <li>매달 빠져나가는 음악 비용</li>
-                  <li>직접 골라야 하고 관리해야 하는 번거로움</li>
-                </ul>
-              </div>
-
               <div className={styles.closing}>음악은 틀지만, 남는 건 없었습니다</div>
-            </div>
+
+                {/* 4칸 그리드 */}
+                <div className={styles.featureGridSection}>
+                  <div className={styles.featureGridWrapper}>
+                    <div className={styles.featureGrid}>
+                      <div className={styles.featureCell}>
+                        <span className={styles.featureCellNum}>1</span>
+                        <p className={styles.featureCellTitle}>매장에서 틀어도 저작권 문제 없는 음악만 제공합니다.</p>
+                        <p className={styles.featureCellDesc}>※ ODO 음원으로만 구성되어 있습니다.</p>
+                      </div>
+                      <div className={styles.featureCell}>
+                        <span className={styles.featureCellNum}>2</span>
+                        <p className={styles.featureCellTitle}>매장 분위기에 맞는 플레이리스트를 바로 골라 재생할 수 있습니다.</p>
+                      </div>
+                      <div className={styles.featureCell}>
+                        <span className={styles.featureCellNum}>3</span>
+                        <p className={styles.featureCellTitle}>매장에서 음악을 재생한 만큼 정산금을 지급받습니다.</p>
+                      </div>
+                      <div className={styles.featureCell}>
+                        <span className={styles.featureCellNum}>4</span>
+                        <p className={styles.featureCellTitle}>처음 한 번만 설정하고 이후에는 플레이리스트만 재생하세요.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </section>
 
           {/* YouTube 섹션 */}
@@ -109,11 +115,7 @@ export default function EasyshopLandingPage() {
             </div>
           </section>
 
-          <div className={styles.pillStage}>
-            <span className={`${styles.pillsm} ${styles.p1}`}>매장 전용</span>
-            <span className={`${styles.pillsm} ${styles.p2}`}>광고 없음</span>
-            <span className={`${styles.pillsm} ${styles.p3}`}>저작권 클리어</span>
-          </div>
+
 
           {/* 통합 이용 가이드 */}
           <section className={styles.stepWrap} aria-label="ODO 이용 가이드">
@@ -157,7 +159,7 @@ export default function EasyshopLandingPage() {
                 {/* 오른쪽: 이미지 */}
                 <div className={styles.stepRightCard}>
                   <img
-                    src="/images/pos.png"
+                    src="/images/mockup.png"
                     alt="매장 음악 사용 예시"
                     style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                   />

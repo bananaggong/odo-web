@@ -211,7 +211,7 @@
 .pillStage {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(10px, 2.2vw, 40px);
+  gap: clamp(6px, 1.3vw, 24px);
   align-items: center;
   justify-items: center;
   margin-top: 28px;
@@ -474,7 +474,62 @@
   .stepCard { padding: 14px; }
   .stepRightCard { min-height: 200px; }
 }
+.featureGridSection {
+  margin-top: clamp(40px, 5vw, 72px);
+  padding: 0 16px;
+  max-width: 1008px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+.featureGridWrapper {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #C8EBC0;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 3px;
+}
+
+.featureCell {
+  background: #ffffff;
+  padding: 80px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+}
+
+.featureCellNum {
+  align-self: flex-start;
+  font-size: 48px;
+  font-weight: 900;
+  color: #2DAA4F;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.featureCellTitle {
+  font-size: 17px;
+  font-weight: 900;
+  color: #1A1A1A;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.featureCellDesc {
+  font-size: 12px;
+  font-weight: 400;
+  color: #555555;
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+}
 /* ===== main ===== */
 .main {
   padding: 16px 16px 0;

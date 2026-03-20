@@ -1,0 +1,523 @@
+/* ============================================================
+   /landing/easyshop2 — page.module.css
+   Mobile-first (375px base) · Pretendard + Roboto
+   ============================================================ */
+
+/* ── 기본 래퍼 ── */
+.page {
+  font-family: "Pretendard", "Pretendard Variable", ui-sans-serif, -apple-system,
+    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  background: #ffffff;
+  color: #222222;
+  min-height: 100dvh;
+}
+
+/* ============================================================
+   공통 버튼
+   ============================================================ */
+
+/* 노란 pill — Primary CTA */
+.btnYellow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 28px;
+  background: #ffdd33;
+  color: #222222;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 60px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btnYellow:hover { opacity: 0.88; }
+
+/* 초록 링크 버튼 */
+.btnGreenLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 28px;
+  background: #39a628;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.btnGreenLink:hover { opacity: 0.88; }
+
+/* ============================================================
+   공통 섹션 타이틀 / 서브
+   ============================================================ */
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222222;
+  line-height: 1.3;
+  margin: 0 0 12px;
+}
+.sectionSub {
+  font-size: 14px;
+  font-weight: 400;
+  color: #4a4a4a;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+/* ============================================================
+   S1 — Hero (풀블리드 이미지)
+   ============================================================ */
+.s1 {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 480px;
+  max-height: 800px;
+  overflow: hidden;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.heroDim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+.heroBody {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 20px 40px;
+  gap: 12px;
+}
+
+.heroHeadline {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.heroAccent {
+  color: #ffdd33;
+}
+
+.heroSub {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================
+   S2 — Feature Tags + 4-Grid
+   ============================================================ */
+.s2 {
+  background: #f6ffef;
+  padding: 32px 20px;
+}
+
+/* Pill 태그 리스트 */
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #4a4a4a;
+  white-space: nowrap;
+}
+
+/* 2×2 Grid — gap 1px으로 구분선 효과 */
+.gridWrapper {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #e0e0e0; /* gap 색상 */
+}
+
+.grid2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1px;
+}
+
+.gridCell {
+  background: #ffffff;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cellNum {
+  font-size: 11px;
+  font-weight: 500;
+  color: #7d7d7d;
+  font-family: "Roboto", ui-monospace, monospace;
+}
+
+.cellTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #222222;
+  margin: 4px 0 0;
+  line-height: 1.3;
+}
+
+.cellDesc {
+  font-size: 13px;
+  font-weight: 400;
+  color: #4a4a4a;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================================
+   S3 — YouTube Embed
+   ============================================================ */
+.s3 {
+  background: #ffffff;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.s3Label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4a4a4a;
+  margin: 0;
+  text-align: center;
+}
+
+/* 16:9 비율 유지 */
+.ytWrap {
+  width: 100%;
+  max-width: 335px;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #333643;
+}
+
+.ytFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* ============================================================
+   S4 — Notebook Mockup
+   ============================================================ */
+.s4 {
+  background: #fffbef;
+  padding: 32px 20px;
+}
+
+.mockupWrap {
+  width: 100%;
+  max-width: 335px;
+  margin: 0 auto;
+}
+
+.mockupImg {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #f4f4f4;
+}
+
+/* ============================================================
+   S5 — How to (아이콘 + 스텝)
+   ============================================================ */
+.s5 {
+  background: #ffffff;
+  padding: 32px 20px;
+}
+
+.howToList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.howToItem {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.iconBox {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f6ffef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.howToText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stepNum {
+  font-size: 12px;
+  font-weight: 500;
+  color: #7d7d7d;
+  font-family: "Roboto", ui-monospace, monospace;
+}
+
+.stepTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #222222;
+  margin: 2px 0 0;
+  line-height: 1.3;
+}
+
+.stepDesc {
+  font-size: 13px;
+  font-weight: 400;
+  color: #4a4a4a;
+  line-height: 1.6;
+  margin: 4px 0 0;
+}
+
+.howToCtaRow {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* ============================================================
+   S6 — FAQ Accordion
+   ============================================================ */
+.s6 {
+  background: #f4f4f4;
+  padding: 32px 20px;
+}
+
+.faqList {
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.faqItem {
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.faqItem:last-child {
+  border-bottom: none;
+}
+
+.faqQRow {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.faqQText {
+  font-size: 15px;
+  font-weight: 500;
+  color: #222222;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.faqToggle {
+  flex-shrink: 0;
+  font-size: 20px;
+  font-weight: 400;
+  color: #7d7d7d;
+  line-height: 1;
+  font-family: "Roboto", ui-monospace, monospace;
+}
+
+.faqAText {
+  font-size: 13px;
+  font-weight: 400;
+  color: #4a4a4a;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0 16px 14px;
+}
+
+/* 첫/마지막 radius는 gridWrapper overflow:hidden이 처리 */
+.faqFirst { border-radius: 10px 10px 0 0; }
+.faqLast { border-radius: 0 0 10px 10px; }
+
+.faqCtaRow {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* ============================================================
+   S7 — CTA (그린 배경)
+   ============================================================ */
+.s7 {
+  background: #39a628;
+  padding: 40px 20px;
+}
+
+.s7Title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+  margin: 0 0 8px;
+}
+
+.s7Sub {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.s7BtnRow {
+  display: flex;
+  gap: 10px;
+}
+
+/* S7 노란 CTA */
+.s7BtnYellow {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  background: #ffdd33;
+  color: #222222;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 60px;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.s7BtnYellow:hover { opacity: 0.88; }
+
+/* S7 흰색 CTA */
+.s7BtnWhite {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  background: #ffffff;
+  color: #39a628;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 60px;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.s7BtnWhite:hover { opacity: 0.88; }
+
+/* ============================================================
+   PC 브레이크포인트 (≥ 768px)
+   ============================================================ */
+@media (min-width: 768px) {
+  /* S1 — 풀블리드 유지, 폰트만 키움 */
+  .heroBody { padding: 0 48px 60px; }
+  .heroHeadline { font-size: 36px; }
+  .heroSub { font-size: 17px; }
+
+  /* S2 */
+  .s2 { padding: 56px 40px; }
+
+  /* S3 */
+  .s3 { padding: 56px 40px; }
+  .ytWrap { max-width: 640px; }
+
+  /* S4 */
+  .s4 { padding: 56px 40px; }
+  .mockupWrap { max-width: 640px; }
+  .mockupImg { height: 360px; }
+
+  /* S5 */
+  .s5 { padding: 56px 40px; }
+  .howToList { max-width: 640px; }
+
+  /* S6 */
+  .s6 { padding: 56px 40px; }
+  .faqList { max-width: 640px; }
+
+  /* S7 */
+  .s7 { padding: 64px 40px; }
+  .s7Title { font-size: 28px; }
+  .s7BtnRow { max-width: 400px; }
+
+  /* 공통 */
+  .sectionTitle { font-size: 24px; }
+}
+
+@media (min-width: 1024px) {
+  .heroBody { padding: 80px 80px; }
+  .s2, .s3, .s4, .s5, .s6 { padding: 80px 0; }
+  .s2 > *, .s3 > *, .s4 > *, .s5 > *, .s6 > * { max-width: 900px; margin-left: auto; margin-right: auto; }
+  .s7 { padding: 96px 0; }
+  .s7 > * { max-width: 900px; margin-left: auto; margin-right: auto; }
+}
