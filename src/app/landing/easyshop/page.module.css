@@ -66,7 +66,7 @@
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 100px;
   padding: 5px 14px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: #FFFFFF;
   margin-bottom: 14px;
@@ -76,7 +76,7 @@
 
 .heroHeadline {
   margin: 0 0 10px;
-  font-size: clamp(24px, 3.8vw, 52px);
+  font-size: clamp(29px, 4.56vw, 62px);
   font-weight: 900;
   line-height: 1.15;
   color: #FFFFFF;
@@ -85,7 +85,7 @@
 
 .heroSub {
   margin: 0 0 24px;
-  font-size: clamp(12px, 1.3vw, 17px);
+  font-size: clamp(14px, 1.56vw, 20px);
   color: rgba(255, 255, 255, 0.82);
   line-height: 1.65;
 }
@@ -105,7 +105,7 @@
   border-radius: 10px;
   padding: 0 22px;
   height: 46px;
-  font-size: clamp(13px, 1.2vw, 15px);
+  font-size: clamp(16px, 1.44vw, 18px);
   font-weight: 700;
   color: #1A1A1A;
   text-decoration: none;
@@ -113,7 +113,7 @@
 }
 
 .heroCtaText {
-  font-size: clamp(12px, 1.1vw, 14px);
+  font-size: clamp(14px, 1.32vw, 17px);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.88);
   text-decoration: none;
@@ -219,7 +219,7 @@
 
 .benefitLabel {
   margin: 0;
-  font-size: clamp(14px, 1.5vw, 17px);
+  font-size: clamp(17px, 1.8vw, 20px);
   font-weight: 700;
   color: #1A1A1A;
   text-align: center;
@@ -480,37 +480,74 @@
 .ctaCard {
   position: relative;
   background: #FFFFFF;
-  border: 1.5px solid #E0E0E0;
-  border-radius: 16px;
-  padding: 28px 20px;
+  border: none;
+  border-radius: 20px;
+  padding: 28px 24px 24px;
   display: flex;
   flex-direction: column;
 }
 
-.ctaCardEmoji {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  font-size: 24px;
+.ctaCardYellow {
+  background: #FFFBEE;
+}
+
+.ctaCardGreen {
+  background: #F0FBF0;
+}
+
+.ctaCardTop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ctaCardImg {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.ctaCardQuote {
+  flex: 1;
+  text-align: left;
+}
+
+.ctaCardQuoteMark {
+  display: block;
+  font-size: 28px;
+  color: #FFDD33;
   line-height: 1;
+  margin-bottom: 4px;
+}
+
+.ctaCardQuoteMarkClose {
+  display: block;
+  font-size: 28px;
+  color: #FFDD33;
+  line-height: 1;
+  margin-top: 4px;
 }
 
 .ctaCardText {
-  font-size: clamp(14px, 1.8vw, 16px);
-  font-weight: 700;
+  font-size: clamp(15px, 1.8vw, 18px);
+  font-weight: 900;
   color: #1A1A1A;
-  text-align: center;
-  margin: 0 0 24px;
-  line-height: 1.5;
+  text-align: left;
+  margin: 0;
+  line-height: 1.4;
 }
 
 .ctaCardBtnYellow {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   background: #FFDD33;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   height: 54px;
   font-weight: 700;
   font-size: 16px;
@@ -523,9 +560,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   background: #39A628;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   height: 54px;
   font-weight: 700;
   font-size: 16px;
@@ -690,7 +728,7 @@
 .featureGridSection {
   margin-top: clamp(40px, 5vw, 72px);
   padding: 0 16px;
-  max-width: 1008px;
+  max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -733,7 +771,7 @@
 }
 
 .featureCellTitle {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 900;
   color: #1A1A1A;
   margin: 0 0 8px;
@@ -742,7 +780,7 @@
 }
 
 .featureCellDesc {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   color: #555555;
   line-height: 1.5;

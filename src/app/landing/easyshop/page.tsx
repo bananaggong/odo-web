@@ -77,6 +77,10 @@ export default function EasyshopLandingPage() {
                   <img src="/images/lading-no.png" alt="" className={styles.benefitImg} />
                   <p className={styles.benefitLabel}>추가 비용 없음</p>
                 </div>
+                <div className={styles.benefitItem}>
+                  <img src="/images/thumbup.png" alt="" className={styles.benefitImg} />
+                  <p className={styles.benefitLabel}>저작권 100% 프리</p>
+                </div>
               </div>
 
               <div className={styles.spacer} />
@@ -94,7 +98,7 @@ export default function EasyshopLandingPage() {
                       </div>
                       <div className={styles.featureCell}>
                         <span className={styles.featureCellNum}>2</span>
-                        <p className={styles.featureCellTitle}>매장 분위기에 맞는 플레이리스트를 바로 골라 재생할 수 있습니다.</p>
+                        <p className={styles.featureCellTitle}>매장에 맞는 플레이리스트를 바로 골라 재생할 수 있습니다.</p>
                       </div>
                       <div className={styles.featureCell}>
                         <span className={styles.featureCellNum}>3</span>
@@ -193,9 +197,19 @@ export default function EasyshopLandingPage() {
                 <article className={styles.faqCard}>
                   <div className={styles.faqQRow}>
                     <span className={styles.faqQ}>Q.</span>
-                    <h3 className={styles.faqQText}>얼마나 받을 수 있나요?</h3>
+                    <h3 className={styles.faqQText}>정말 저작권 문제가 생기지 않나요?</h3>
                   </div>
-                  <p className={styles.faqAText}>월 최대 약 3만원 수준입니다.</p>
+                  <p className={styles.faqAText}>ODO의 모든 음원은 자체 제작된 AI 음악으로 저작권 문제가 해결되어 있습니다. 매장에서 안심하고 재생하실 수 있습니다.</p>
+                </article>
+
+                <article className={styles.faqCard}>
+                  <div className={styles.faqQRow}>
+                    <span className={styles.faqQ}>Q.</span>
+                    <h3 className={styles.faqQText}>얼마나 포인트를 받을 수 있나요?</h3>
+                  </div>
+                  <p className={styles.faqAText}>
+                    재생 시간과 재생 횟수에 따라 포인트가 적립됩니다. 적립된 포인트는 상품·기프티콘으로 교환하실 수 있으며, 세부 비율은 이지샵 내 마이페이지에서 확인하실 수 있습니다.
+                  </p>
                 </article>
 
                 <article className={styles.faqCard}>
@@ -226,33 +240,44 @@ export default function EasyshopLandingPage() {
               </h2>
 
               <div className={styles.ctaCardGrid}>
-                {/* 카드 1: 미해당 */}
-                <div className={styles.ctaCard}>
-                  <span className={styles.ctaCardEmoji}>🛒</span>
-                  <p className={styles.ctaCardText}>"아직 이지샵 회원이 아니에요"</p>
+                {/* 카드 1: 미회원 */}
+                <div className={`${styles.ctaCard} ${styles.ctaCardYellow}`}>
+                  <div className={styles.ctaCardTop}>
+                    <img src="/images/clayman1.png" alt="" className={styles.ctaCardImg} />
+                    <div className={styles.ctaCardQuote}>
+                      <span className={styles.ctaCardQuoteMark}>❝</span>
+                      <p className={styles.ctaCardText}>아직 유튜브 뮤직<br />이용 중이 아니에요</p>
+                      <span className={styles.ctaCardQuoteMarkClose}>❞</span>
+                    </div>
+                  </div>
                   <a
                     className={styles.ctaCardBtnYellow}
-                    href="https://www.easyshop.co.kr"
+                    href="https://music.youtube.com/playlist?list=PLcuymYOCldOyXhX1wrDoMbztUnAeu1spl"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    이지샵 가입하러 가기
+                    유튜브 뮤직 가입하러 가기
                   </a>
-                  <p className={styles.ctaCardSub}>* 이지샵 가입 후 ODO 신청까지 5분이면 충분해요</p>
-                  <p className={styles.ctaCardSub}>* 이지샵 회원은 ODO를 무료로 이용할 수 있어요</p>
+                  <p className={styles.ctaCardSub}></p>
                 </div>
 
-                {/* 카드 2: 해당 */}
-                <div className={styles.ctaCard}>
-                  <span className={styles.ctaCardEmoji}>🎵</span>
-                  <p className={styles.ctaCardText}>"이미 이지샵 회원이에요"</p>
+                {/* 카드 2: 기회원 */}
+                <div className={`${styles.ctaCard} ${styles.ctaCardGreen}`}>
+                  <div className={styles.ctaCardTop}>
+                    <img src="/images/clayman2.png" alt="" className={styles.ctaCardImg} />
+                    <div className={styles.ctaCardQuote}>
+                      <span className={styles.ctaCardQuoteMark}>❝</span>
+                      <p className={styles.ctaCardText}>이미 유튜브 뮤직<br />회원이에요</p>
+                      <span className={styles.ctaCardQuoteMarkClose}>❞</span>
+                    </div>
+                  </div>
                   <a
                     className={styles.ctaCardBtnGreen}
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSf0yLS-x-d6LwdpYxA4G2k3V6xDYsAQR_rU13lNxZSwybKD6g/viewform"
+                    href="https://onedayofmusic.com/"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    ODO 무료로 시작하기
+                    ODO 시작하기
                   </a>
                 </div>
               </div>
