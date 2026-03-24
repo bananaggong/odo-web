@@ -108,7 +108,7 @@ export default function PrivacyPage() {
             개인정보 보유 기간은 다음과 같습니다.
             <ul style={{ ...listUlStyle, marginTop: 8 }}>
               <li>
-                <b style={bStyle}>회원 가입 및 관리:</b> 회원 탈퇴 시까지. (단, 법적 분쟁 대비 등을 위해 <b style={bStyle}>[12]개월</b>간 보관할 수 있음)
+                <b style={bStyle}>회원 가입 및 관리:</b> 회원 탈퇴 시까지. (단, 분쟁 해결, 민원 처리, 법령상 의무 이행을 위해 필요한 경우 탈퇴 후 <b style={bStyle}>6개월</b>간 보관할 수 있습니다.)
               </li>
               <li>
                 <b style={bStyle}>관련 법령에 의한 보관:</b> 전자상거래법에 따른 결제 기록(5년), 접속 로그(3개월) 등.
@@ -127,11 +127,34 @@ export default function PrivacyPage() {
         {/* 제5조 */}
         <h2 style={h2Style}>제5조 (개인정보 처리의 위탁)</h2>
         <p style={pStyle}>회사는 원활한 개인정보 업무처리를 위하여 다음과 같이 개인정보 처리 업무를 위탁하고 있습니다.</p>
-        <ul style={listUlStyle}>
-          <li>
-            <b style={bStyle}>구글 호스팅 서비스 운영:</b> 
-          </li>
-        </ul>
+        <div style={tableWrapStyle}>
+          <table style={tableStyle}>
+            <thead>
+              <tr>
+                <th style={thStyle}>수탁 업체</th>
+                <th style={thStyle}>위탁 업무</th>
+                <th style={thStyle}>보유 기간</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={tdKeyStyle}>Last.fm (Audioscrobbler Ltd.)</td>
+                <td style={tdStyle}>청취 데이터 추적·집계</td>
+                <td style={tdStyle}>위탁 계약 종료 시</td>
+              </tr>
+              <tr>
+                <td style={tdKeyStyle}>Vercel Inc.</td>
+                <td style={tdStyle}>웹 호스팅 서비스 운영</td>
+                <td style={tdStyle}>위탁 계약 종료 시</td>
+              </tr>
+              <tr>
+                <td style={tdKeyStyle}>Google Cloud Platform</td>
+                <td style={tdStyle}>서버 및 데이터 보관</td>
+                <td style={tdStyle}>위탁 계약 종료 시</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         {/* 제6조 */}
         <h2 style={h2Style}>제6조 (이용자의 권리·의무 및 그 행사방법)</h2>

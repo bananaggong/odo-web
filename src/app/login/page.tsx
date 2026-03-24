@@ -31,7 +31,7 @@ function LoginContent() {
       } else if (role === null) {
         // 관리자도 아니고 매장 데이터도 없음 -> 신규 회원!
         if (confirm("등록된 매장 정보가 없습니다.\n회원가입 페이지로 이동하여 추가 정보를 입력하시겠습니까?")) {
-          const signupUrl = source ? `/signup?source=${encodeURIComponent(source)}` : "/signup";
+          const signupUrl = source ? `/agree?source=${encodeURIComponent(source)}` : "/agree";
           router.push(signupUrl);
         } else {
           signOut(auth);

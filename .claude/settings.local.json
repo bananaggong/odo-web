@@ -23,7 +23,9 @@
       "Bash(python3 -c \":*)",
       "Bash(py --version)",
       "Bash(python3:*)",
-      "Bash(find . -name *.env* -type f)"
+      "Bash(find . -name *.env* -type f)",
+      "Bash(find /c/projects/odo-web -type d -name *auth* -o -type d -name *login* -o -type d -name *signup* -o -type d -name *register*)",
+      "Bash(find /c/projects/odo-web/src -name *auth* -type f)"
     ]
   }
 }

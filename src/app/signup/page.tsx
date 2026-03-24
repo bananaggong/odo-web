@@ -35,6 +35,7 @@ function SignUpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const source = searchParams.get("source");
+  const marketing = searchParams.get("marketing") === "true";
 
   const [googleUser, setGoogleUser] = useState<any>(null);
   const [formData, setFormData] = useState({
@@ -119,6 +120,8 @@ function SignUpContent() {
         created_at: new Date().toISOString(),
         franchise: source || "personal",
         source: source || null,
+        marketing_agreed: marketing,
+        agreed_at: new Date().toISOString(),
       }, { merge: true });
 
       alert("매장 정보 등록이 완료되었습니다! 마이페이지로 이동합니다.");

@@ -56,11 +56,9 @@ export default function EasyshopHeader() {
           <div className={styles.right}>
             <a
               className={styles.ctaBtn}
-              href="https://docs.google.com/forms/d/e/1FAIpQLSf0yLS-x-d6LwdpYxA4G2k3V6xDYsAQR_rU13lNxZSwybKD6g/viewform"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/login?source=easyshop"
             >
-              무료로 시작하기
+              ODO 시작하기
             </a>
 
             <button
@@ -87,12 +85,10 @@ export default function EasyshopHeader() {
             <hr className={styles.mobileDivider} />
             <a
               className={styles.mobileCta}
-              href="https://docs.google.com/forms/d/e/1FAIpQLSf0yLS-x-d6LwdpYxA4G2k3V6xDYsAQR_rU13lNxZSwybKD6g/viewform"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/login?source=easyshop"
               onClick={() => setOpen(false)}
             >
-              무료로 시작하기
+              ODO 시작하기
             </a>
           </div>
         </>

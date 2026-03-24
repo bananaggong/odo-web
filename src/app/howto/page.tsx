@@ -214,6 +214,9 @@ export default function HowtoPage() {
       매장 사용을 고려해 준비된 음원을 기반으로 큐레이션되기 때문에 매장 운영자가
       개별적으로 저작권을 확인하거나 관리할 필요가 없습니다.
     </p>
+    <p style={{ margin: "0 0 10px", color: "rgba(255,255,255,.42)", fontSize: 12, lineHeight: 1.7, fontWeight: 600 }}>
+      ODO 서비스는 유튜브 뮤직 이용약관을 준수하여 운영됩니다.
+    </p>
 
     <h3 style={h3Style}>이런 분들께 추천합니다</h3>
     <ul style={listUlStyle}>
@@ -349,7 +352,7 @@ export default function HowtoPage() {
       <div style={infoRowStyle}>
         <span style={infoKeyStyle}>메일</span>
         <a style={infoValLinkStyle} href="mailto:contact@gragpes.my">
-          contact@gragpes.my
+          contact@grapes.my
         </a>
       </div>
       <div style={infoRowStyle}>
