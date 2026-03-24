@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-// 💡 useAuth 경로를 프로젝트에 맞게 수정하세요! (예: "@/context/AuthContext" 등)
 import { useAuth } from "@/lib/auth-context";
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const source = searchParams.get("source");
@@ -106,8 +105,8 @@ export default function LoginPage() {
       </div>
 
       <div style={{ position: "absolute", bottom: "-140px", right: "40px", textAlign: "right", zIndex: 10 }}>
-        <Link 
-          href="/admin/login" 
+        <Link
+          href="/admin/login"
           style={{ color: "#4b5563", fontSize: "11px", textDecoration: "none", opacity: 0.6, transition: "opacity 0.2s" }}
           onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
           onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.6")}
@@ -116,5 +115,13 @@ export default function LoginPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginContent />
+    </Suspense>
   );
 }

@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { auth, db } from "@/lib/firebase";
-// 💡 더 이상 쓰지 않는 getDoc은 빼고, doc과 setDoc만 남겼습니다.
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter, useSearchParams } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
-// 🔥 [추가된 부분 1] Next.js 전용 스크립트 태그 불러오기
 import Script from "next/script";
 
 /**
@@ -33,7 +31,7 @@ async function verifyLastFmUser(username: string): Promise<boolean> {
   }
 }
 
-export default function SignUpPage() {
+function SignUpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const source = searchParams.get("source");
@@ -223,6 +221,14 @@ export default function SignUpPage() {
         </form>
       </div>
     </>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense>
+      <SignUpContent />
+    </Suspense>
   );
 }
 
