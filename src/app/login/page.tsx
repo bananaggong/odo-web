@@ -3,13 +3,15 @@
 import { useState, useEffect } from "react";
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 // 💡 useAuth 경로를 프로젝트에 맞게 수정하세요! (예: "@/context/AuthContext" 등)
-import { useAuth } from "@/lib/auth-context"; 
+import { useAuth } from "@/lib/auth-context";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const source = searchParams.get("source");
   const [error, setError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   
@@ -30,7 +32,8 @@ export default function LoginPage() {
       } else if (role === null) {
         // 관리자도 아니고 매장 데이터도 없음 -> 신규 회원!
         if (confirm("등록된 매장 정보가 없습니다.\n회원가입 페이지로 이동하여 추가 정보를 입력하시겠습니까?")) {
-          router.push("/signup"); 
+          const signupUrl = source ? `/signup?source=${encodeURIComponent(source)}` : "/signup";
+          router.push(signupUrl);
         } else {
           signOut(auth);
           setIsLoggingIn(false);

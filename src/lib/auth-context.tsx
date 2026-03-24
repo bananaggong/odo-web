@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 interface AuthContextType {
   user: User | null;
   role: string | null;
+  adminScope: string | null;
   loading: boolean;
   logout: () => Promise<void>;
 }
@@ -17,6 +18,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   role: null,
+  adminScope: null,
   loading: true,
   logout: async () => {},
 });
@@ -24,6 +26,7 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<string | null>(null);
+  const [adminScope, setAdminScope] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -56,9 +59,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (adminSnap.exists()) {
               const adminData = adminSnap.data();
               setRole(adminData.role || "admin");
+              setAdminScope(adminData.scope || null);
               Cookies.set("admin_logged_in", "true", { expires: 1 });
               setLoading(false);
-              return; 
+              return;
             }
           }
 
@@ -76,10 +80,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } catch (error) {
           console.error("권한 확인 실패:", error);
           setRole(null);
+          setAdminScope(null);
         }
       } else {
         setRole(null);
-        Cookies.remove("admin_logged_in"); 
+        setAdminScope(null);
+        Cookies.remove("admin_logged_in");
       }
       
       // ✅ 모든 처리가 끝나면 로딩 완료
@@ -90,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, role, loading, logout }}>
+    <AuthContext.Provider value={{ user, role, adminScope, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

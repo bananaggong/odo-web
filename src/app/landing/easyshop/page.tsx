@@ -86,33 +86,34 @@ export default function EasyshopLandingPage() {
               <div className={styles.spacer} />
 
               <div className={styles.closing}>음악은 틀지만, 남는 건 없었습니다</div>
+            </div>
+          </section>
 
-                {/* 4칸 그리드 */}
-                <div className={styles.featureGridSection}>
-                  <div className={styles.featureGridWrapper}>
-                    <div className={styles.featureGrid}>
-                      <div className={styles.featureCell}>
-                        <span className={styles.featureCellNum}>1</span>
-                        <p className={styles.featureCellTitle}>매장에서 틀어도 저작권 문제 없는 음악만 제공합니다.</p>
-                        <p className={styles.featureCellDesc}>※ ODO 음원으로만 구성되어 있습니다.</p>
-                      </div>
-                      <div className={styles.featureCell}>
-                        <span className={styles.featureCellNum}>2</span>
-                        <p className={styles.featureCellTitle}>매장에 맞는 플레이리스트를 바로 골라 재생할 수 있습니다.</p>
-                      </div>
-                      <div className={styles.featureCell}>
-                        <span className={styles.featureCellNum}>3</span>
-                        <p className={styles.featureCellTitle}>매장에서 음악을 재생한 만큼 정산금을 지급받습니다.</p>
-                        <p className={styles.featureCellDesc}>※ 재생 기록을 집계하는 Last.fm 연동은 무료 서비스입니다.</p>
-                      </div>
-                      <div className={styles.featureCell}>
-                        <span className={styles.featureCellNum}>4</span>
-                        <p className={styles.featureCellTitle}>처음 한 번만 설정하고 이후에는 플레이리스트만 재생하세요.</p>
-                      </div>
-                    </div>
-                  </div>
+          {/* 4-card 피처 섹션 */}
+          <section className={styles.featureSection}>
+            <div className={styles.featureSectionInner}>
+              <div className={styles.featureCardRow}>
+                <div className={styles.featureCard}>
+                  <span className={styles.featureCardBadge}>1</span>
+                  <p className={styles.featureCardTitle}>매장에서 틀어도 저작권 문제 없는 음악만 제공합니다.</p>
+                  <p className={styles.featureCardDesc}>※ ODO 음원으로만 구성되어 있습니다.</p>
+                </div>
+                <div className={styles.featureCard}>
+                  <span className={styles.featureCardBadge}>2</span>
+                  <p className={styles.featureCardTitle}>매장에 맞는 플레이리스트를 바로 골라 재생할 수 있습니다.</p>
+                  <p className={styles.featureCardDesc}>※ 주기적인 플레이리스트 업데이트</p>
+                </div>
+                <div className={styles.featureCard}>
+                  <span className={styles.featureCardBadge}>3</span>
+                  <p className={styles.featureCardTitle}>매장에서 음악을 재생한 만큼 정산금을 지급받습니다.</p>
+                  <p className={styles.featureCardDesc}>※ 재생 기록을 집계하는 Last.fm 연동은 무료 서비스입니다.</p>
+                </div>
+                <div className={`${styles.featureCard} ${styles.featureCardAccent}`}>
+                  <span className={styles.featureCardBadge}>4</span>
+                  <p className={styles.featureCardTitle}>처음 한 번만 설정하고 이후에는 플레이리스트만 재생하세요.</p>
                 </div>
               </div>
+            </div>
           </section>
 
           <YouTubeSection />
@@ -271,14 +272,12 @@ export default function EasyshopLandingPage() {
                       <span className={styles.ctaCardQuoteMarkClose}>❞</span>
                     </div>
                   </div>
-                  <a
+                  <Link
                     className={styles.ctaCardBtnGreen}
-                    href="https://onedayofmusic.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="/login?source=easyshop"
                   >
                     ODO 시작하기
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

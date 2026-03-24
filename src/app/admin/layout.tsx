@@ -8,55 +8,80 @@ import { useRouter } from "next/navigation";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { logout, role, adminScope, loading } = useAuth();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true); // 컴포넌트가 브라우저에서 실행되면 true로 변경
+    setMounted(true);
   }, []);
 
-  // ✅ 2. 마운트 되기 전(로딩 중)에는 로딩 화면 출력 (못생긴 리스트 숨김)
-  if (!mounted) {
+  useEffect(() => {
+    if (!mounted || loading) return;
+    if (pathname === "/admin/login") return;
+    if (role === "franchise_admin") {
+      const allowed = pathname.startsWith("/admin/franchise/") || pathname.startsWith("/admin/dashboard/");
+      if (!allowed) {
+        router.replace(`/admin/franchise/${adminScope}`);
+      }
+    }
+  }, [role, adminScope, loading, mounted, pathname, router]);
+
+  // 마운트 전이거나 auth 로딩 중이면 로딩 화면 출력 (권한 확인 전 페이지 노출 방지)
+  if (!mounted || (loading && pathname !== "/admin/login")) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh', 
-        backgroundColor: '#1f2937', // 배경색을 헤더와 맞춤
-        color: 'white' 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#1f2937',
+        color: 'white'
       }}>
         Loading...
       </div>
     );
   }
   const isLoginPage = pathname === "/admin/login";
-  
+
   if (isLoginPage) {
     return (
       <div style={{ minHeight: "100vh", backgroundColor: "#111827" }}>
-         {children}
+        {children}
+      </div>
+    );
+  }
+
+  // 권한 없는 페이지 접근 시 children 렌더링 자체를 차단
+  const franchiseAdminAllowed = pathname.startsWith("/admin/franchise/") || pathname.startsWith("/admin/dashboard/");
+  if (role === "franchise_admin" && !franchiseAdminAllowed) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#1f2937', color: 'white' }}>
+        Loading...
       </div>
     );
   }
   
-  const menuItems = [
-    { name: "매장 통계", href: "/admin/dashboard", icon: "📊" },
-    { name: "데이터 검증", href: "/admin/validator", icon: "🚨" },
-    { name: "프랜차이즈 통계", href: "/admin/franchise", icon: "🏪" },
-    { name: "환경설정", href: "/admin/settings", icon: "⚙️" },
+  const allMenuItems = [
+    { name: "매장 통계", href: "/admin/dashboard", icon: "📊", adminOnly: true },
+    { name: "데이터 검증", href: "/admin/validator", icon: "🚨", adminOnly: true },
+    { name: "프랜차이즈 통계", href: "/admin/franchise", icon: "🏪", adminOnly: true },
+    { name: "환경설정", href: "/admin/settings", icon: "⚙️", adminOnly: true },
   ];
+  const franchiseAdminMenu = adminScope
+    ? [{ name: "매장 현황", href: `/admin/franchise/${adminScope}`, icon: "🏪", adminOnly: false }]
+    : [];
+  const menuItems = role === "franchise_admin" ? franchiseAdminMenu : allMenuItems;
 
   return (
     <div className="admin-container">
       <aside className={`admin-sidebar ${mobileMenuOpen ? "mobile-open" : ""}`}>
         <div className="sidebar-header">
           <h1 className="logo-text" onClick={() => {
-              router.push('/admin/dashboard');
+              router.push(role === "franchise_admin" ? `/admin/franchise/${adminScope}` : '/admin/dashboard');
               setMobileMenuOpen(false);
-            }}style={{ cursor: 'pointer' }}>ODO Admin
+            }} style={{ cursor: 'pointer' }}>ODO Admin
           </h1>
           <button 
             className="mobile-toggle"

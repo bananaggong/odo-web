@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { auth, db } from "@/lib/firebase";
 // 💡 더 이상 쓰지 않는 getDoc은 빼고, doc과 setDoc만 남겼습니다.
 import { doc, setDoc } from "firebase/firestore";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 // 🔥 [추가된 부분 1] Next.js 전용 스크립트 태그 불러오기
@@ -35,7 +35,9 @@ async function verifyLastFmUser(username: string): Promise<boolean> {
 
 export default function SignUpPage() {
   const router = useRouter();
-  
+  const searchParams = useSearchParams();
+  const source = searchParams.get("source");
+
   const [googleUser, setGoogleUser] = useState<any>(null);
   const [formData, setFormData] = useState({
     id: "",           
@@ -109,15 +111,16 @@ export default function SignUpPage() {
 
       // 3. Firestore DB에 매장 정보 저장
       await setDoc(doc(db, "monitored_users", docId), {
-        uid: googleUser.uid,            
-        email: googleUser.email,        
-        lastfm_username: docId,         
+        uid: googleUser.uid,
+        email: googleUser.email,
+        lastfm_username: docId,
         store_name: formData.storeName,
         owner_name: formData.ownerName,
         role: "user",
         active: true,
         created_at: new Date().toISOString(),
-        franchise: "personal" 
+        franchise: source || "personal",
+        source: source || null,
       }, { merge: true });
 
       alert("매장 정보 등록이 완료되었습니다! 마이페이지로 이동합니다.");

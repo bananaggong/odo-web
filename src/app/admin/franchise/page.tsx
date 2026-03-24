@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
+import { useAuth } from "@/lib/auth-context";
 import { calculateRevenue } from "@/lib/revenue";
 import { formatYMD, getDefaultDateRange } from "@/lib/date-utils";
 import { 
@@ -14,10 +15,12 @@ import * as XLSX from 'xlsx';
 
 export default function FranchiseStatsPage() {
   const router = useRouter();
+  const { user, role } = useAuth();
   const [loading, setLoading] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");      
-  const [filterKeyword, setFilterKeyword] = useState(""); 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterKeyword, setFilterKeyword] = useState("");
+  const [adminScope, setAdminScope] = useState<string>("all");
 
   const [dateRange, setDateRange] = useState(getDefaultDateRange);
 
@@ -25,8 +28,19 @@ export default function FranchiseStatsPage() {
   const [totalStats, setTotalStats] = useState({ revenue: 0, plays: 0, stores: 0 });
 
   useEffect(() => {
-    fetchFranchiseData();
-  }, []);
+    const init = async () => {
+      let scope = "all";
+      if (user?.email) {
+        const adminSnap = await getDoc(doc(db, "admins", user.email));
+        if (adminSnap.exists()) {
+          scope = adminSnap.data().scope || "all";
+        }
+      }
+      setAdminScope(scope);
+      fetchFranchiseData(scope);
+    };
+    if (user !== null) init();
+  }, [user]);
 
   const handleDownload = (type: 'xlsx' | 'csv') => {
     if (franchiseData.length === 0) {
@@ -59,12 +73,13 @@ export default function FranchiseStatsPage() {
     }
   };
 
-  const fetchFranchiseData = async () => {
+  const fetchFranchiseData = async (scope?: string) => {
+    const effectiveScope = scope ?? adminScope;
     setLoading(true);
     setLoadingStatus("데이터 집계 중...");
     try {
       const usersSnap = await getDocs(collection(db, "monitored_users"));
-      const userMap: Record<string, string> = {}; 
+      const userMap: Record<string, string> = {};
       usersSnap.forEach(doc => {
         const d = doc.data();
         if (d.lastfm_username) userMap[d.lastfm_username] = d.franchise || 'personal';
@@ -73,7 +88,7 @@ export default function FranchiseStatsPage() {
       const statsColl = collection(db, "daily_stats");
       const qStats = query(statsColl, where("date", ">=", dateRange.start), where("date", "<=", dateRange.end));
       const statsSnap = await getDocs(qStats);
-      const userAggregates: Record<string, number> = {}; 
+      const userAggregates: Record<string, number> = {};
 
       statsSnap.forEach(doc => {
         const d = doc.data();
@@ -82,17 +97,22 @@ export default function FranchiseStatsPage() {
         if (uid) userAggregates[uid] = (userAggregates[uid] || 0) + count;
       });
 
-      const franchiseStats: Record<string, { name: string, stores: number, plays: number, revenue: number, id: string }> = {
-        'seveneleven': { id: 'seveneleven', name: '세븐일레븐', stores: 0, plays: 0, revenue: 0 },
-        'personal': { id: 'personal', name: '개인/기타', stores: 0, plays: 0, revenue: 0 }
-      };
+      const allFranchiseKeys = effectiveScope === "all"
+        ? ['seveneleven', 'personal', 'easyshop']
+        : [effectiveScope];
+
+      const franchiseStats: Record<string, { name: string, stores: number, plays: number, revenue: number, id: string }> = {};
+      const franchiseNames: Record<string, string> = { seveneleven: '세븐일레븐', personal: '개인/기타', easyshop: '이지샵' };
+      allFranchiseKeys.forEach(key => {
+        franchiseStats[key] = { id: key, name: franchiseNames[key] || key, stores: 0, plays: 0, revenue: 0 };
+      });
 
       Object.entries(userAggregates).forEach(([uid, plays]) => {
         const franchiseKey = userMap[uid] || 'personal';
-        const targetKey = franchiseStats[franchiseKey] ? franchiseKey : 'personal';
-        franchiseStats[targetKey].stores += 1;
-        franchiseStats[targetKey].plays += plays;
-        franchiseStats[targetKey].revenue += calculateRevenue(targetKey, plays);
+        if (!franchiseStats[franchiseKey]) return;
+        franchiseStats[franchiseKey].stores += 1;
+        franchiseStats[franchiseKey].plays += plays;
+        franchiseStats[franchiseKey].revenue += calculateRevenue(franchiseKey, plays);
       });
 
       const resultData = Object.values(franchiseStats);
@@ -125,7 +145,7 @@ export default function FranchiseStatsPage() {
             <input type="date" value={dateRange.start} onChange={(e)=>setDateRange({...dateRange, start:e.target.value})} className="input-field" />
             <span className="separator">~</span>
             <input type="date" value={dateRange.end} onChange={(e)=>setDateRange({...dateRange, end:e.target.value})} className="input-field" />
-            <button onClick={fetchFranchiseData} className="primary-btn">조회</button>
+            <button onClick={() => fetchFranchiseData()} className="primary-btn">조회</button>
           </div>
         </div>
       </div>
@@ -153,7 +173,7 @@ export default function FranchiseStatsPage() {
                 <Legend />
                 <Bar dataKey="revenue" name="정산금" barSize={40}>
                   {franchiseData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.id === 'seveneleven' ? '#008060' : '#6366f1'} />
+                    <Cell key={`cell-${index}`} fill={entry.id === 'seveneleven' ? '#008060' : entry.id === 'easyshop' ? '#f59e0b' : '#6366f1'} />
                   ))}
                 </Bar>
               </BarChart>
@@ -171,7 +191,7 @@ export default function FranchiseStatsPage() {
                   paddingAngle={5} dataKey="stores" nameKey="name"
                 >
                   {franchiseData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.id === 'seveneleven' ? '#008060' : '#6366f1'} />
+                    <Cell key={`cell-${index}`} fill={entry.id === 'seveneleven' ? '#008060' : entry.id === 'easyshop' ? '#f59e0b' : '#6366f1'} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -219,7 +239,7 @@ export default function FranchiseStatsPage() {
               {filteredFranchiseData.map((item, idx) => (
                 <tr key={idx}>
                   <td className="brand-td">
-                    <span className="dot" style={{ background: item.id === 'seveneleven' ? '#008060' : '#6366f1' }}></span>
+                    <span className="dot" style={{ background: item.id === 'seveneleven' ? '#008060' : item.id === 'easyshop' ? '#f59e0b' : '#6366f1' }}></span>
                     {item.name}
                   </td>
                   <td>{item.stores.toLocaleString()} 개</td>
