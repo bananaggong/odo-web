@@ -108,7 +108,7 @@ export default function PrivacyPage() {
             개인정보 보유 기간은 다음과 같습니다.
             <ul style={{ ...listUlStyle, marginTop: 8 }}>
               <li>
-                <b style={bStyle}>회원 가입 및 관리:</b> 회원 탈퇴 시까지. (단, 법적 분쟁 대비 등을 위해 <b style={bStyle}>[0]개월</b>간 보관할 수 있음)
+                <b style={bStyle}>회원 가입 및 관리:</b> 회원 탈퇴 시까지. (단, 법적 분쟁 대비 등을 위해 <b style={bStyle}>[12]개월</b>간 보관할 수 있음)
               </li>
               <li>
                 <b style={bStyle}>관련 법령에 의한 보관:</b> 전자상거래법에 따른 결제 기록(5년), 접속 로그(3개월) 등.
@@ -129,10 +129,7 @@ export default function PrivacyPage() {
         <p style={pStyle}>회사는 원활한 개인정보 업무처리를 위하여 다음과 같이 개인정보 처리 업무를 위탁하고 있습니다.</p>
         <ul style={listUlStyle}>
           <li>
-            <b style={bStyle}>호스팅 서비스 운영:</b> [예: 네이버 클라우드, AWS 등 업체명]
-          </li>
-          <li style={{ opacity: 0.75 }}>
-            <b style={bStyle}>결제 서비스 제공 (유료 시):</b> [예: 토스페이먼츠, 나이스페이먼츠 등 업체명]
+            <b style={bStyle}>구글 호스팅 서비스 운영:</b> 
           </li>
         </ul>
 
@@ -173,7 +170,7 @@ export default function PrivacyPage() {
           <div style={{ fontWeight: 900, color: "rgba(255,255,255,.92)", marginBottom: 6 }}>개인정보 보호책임자</div>
           <div style={infoRowStyle}>
             <span style={infoKeyStyle}>성명</span>
-            <span style={infoValStyle}>김민서</span>
+            <span style={infoValStyle}>박영선</span>
           </div>
           <div style={infoRowStyle}>
             <span style={infoKeyStyle}>연락처</span>

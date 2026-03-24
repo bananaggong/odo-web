@@ -15,7 +15,15 @@
       "Bash(node -e \":*)",
       "Bash(mkdir -p C:/Temp)",
       "Bash(printf '%s' \"6Ldh-nUsAAAAAOjcpcEVUJ4VddiIkcHDdEVX5jdd\")",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(ls -lh C:/projects/odo-web/public/images/*.png)",
+      "Bash(python3 -c \":*)",
+      "Bash(py --version)",
+      "Bash(python3:*)",
+      "Bash(find . -name *.env* -type f)"
     ]
   }
 }
