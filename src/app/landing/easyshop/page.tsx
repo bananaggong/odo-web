@@ -139,7 +139,10 @@ export default function EasyshopLandingPage() {
                     <div className={styles.stepNo}>STEP 1</div>
                     <div className={styles.stepCardBody}>
                       <img src="/images/youtubemusic.png" alt="YouTube Music" className={styles.stepCardImg} />
-                      <div className={styles.stepTitle}>YouTube Music 준비</div>
+                      <div className={styles.stepCardText}>
+                        <div className={styles.stepTitle}>YouTube Music 준비</div>
+                        <p className={styles.stepNote}>※ 유튜브 뮤직 구독이 필요함</p>
+                      </div>
                     </div>
                   </div>
 
