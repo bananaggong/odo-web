@@ -10,13 +10,30 @@ import { calculateRevenue } from "@/lib/revenue";
 import { formatYMD, getDatesInRange, getDefaultDateRange } from "@/lib/date-utils";
 import { KST_OFFSET, DAILY_MAX_COUNT } from "@/lib/stats-constants";
 
+function getInitialDashboardState() {
+  const defaults = getDefaultDateRange();
+  if (typeof window === "undefined") {
+    return { dateRange: defaults, searchTerm: "" };
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  return {
+    dateRange: {
+      start: params.get("start") || defaults.start,
+      end: params.get("end") || defaults.end,
+    },
+    searchTerm: params.get("q") || "",
+  };
+}
+
 export default function AdminDashboardPage() {
   const router = useRouter(); 
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false); 
   const [loadingStatus, setLoadingStatus] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");      
-  const [filterKeyword, setFilterKeyword] = useState(""); 
+  const initialState = getInitialDashboardState();
+  const [searchTerm, setSearchTerm] = useState(initialState.searchTerm);      
+  const [filterKeyword, setFilterKeyword] = useState(initialState.searchTerm); 
 
   const [stats, setStats] = useState({
     users: 0, newUsers: 0, plays: 0, prevPlays: 0, revenue: 0, prevRevenue: 0
@@ -25,7 +42,7 @@ export default function AdminDashboardPage() {
   const [chartData, setChartData] = useState<any[]>([]);
   const [userList, setUserList] = useState<any[]>([]);
 
-  const [dateRange, setDateRange] = useState(getDefaultDateRange);
+  const [dateRange, setDateRange] = useState(initialState.dateRange);
 
   useEffect(() => {
     fetchRealData();
@@ -38,8 +55,34 @@ export default function AdminDashboardPage() {
     user.ownerName.toLowerCase().includes(filterKeyword.toLowerCase())
   );
 
+  const buildDashboardQuery = (range = dateRange, keyword = filterKeyword) => {
+    const params = new URLSearchParams();
+    params.set("start", range.start);
+    params.set("end", range.end);
+    if (keyword.trim()) params.set("q", keyword.trim());
+    return params.toString();
+  };
+
+  const updateDashboardUrl = (range = dateRange, keyword = filterKeyword) => {
+    router.replace(`/admin/dashboard?${buildDashboardQuery(range, keyword)}`);
+  };
+
   const handleSearch = () => {
-    setFilterKeyword(searchTerm);
+    const keyword = searchTerm.trim();
+    setFilterKeyword(keyword);
+    updateDashboardUrl(dateRange, keyword);
+  };
+
+  const handleFetch = () => {
+    updateDashboardUrl(dateRange, filterKeyword);
+    fetchRealData(true);
+  };
+
+  const handleViewDetail = (user: any) => {
+    const targetId = user.firebaseUid || user.id;
+    const params = new URLSearchParams(buildDashboardQuery(dateRange, filterKeyword));
+    params.set("source", "admin");
+    router.push(`/admin/dashboard/${encodeURIComponent(targetId)}?${params.toString()}`);
   };
 
   const handleDownload = (type: 'xlsx' | 'csv') => {
@@ -77,7 +120,7 @@ export default function AdminDashboardPage() {
   };
 
   const fetchRealData = async (forceUpdate = false) => {
-    const cacheKey = `dashboard_${dateRange.start}_${dateRange.end}`;
+    const cacheKey = `dashboard_v2_${dateRange.start}_${dateRange.end}`;
     if (!forceUpdate) {
       const cachedData = sessionStorage.getItem(cacheKey);
       if (cachedData) {
@@ -125,6 +168,7 @@ export default function AdminDashboardPage() {
 
       const chartMap: Record<string, { plays: number, revenue: number }> = {};
       const userPlayCounts: Record<string, number> = {};
+      const statUserInfoMap: Record<string, any> = {};
       let totalPlaysInPeriod = 0;
 
       finalStats.forEach(stat => {
@@ -147,6 +191,13 @@ export default function AdminDashboardPage() {
 
         if (!userPlayCounts[uid]) userPlayCounts[uid] = 0;
         userPlayCounts[uid] += count;
+        if (!statUserInfoMap[uid]) {
+          statUserInfoMap[uid] = {
+            ownerName: stat.owner_name || "이름 없음",
+            store_name: stat.store_name || "Unknown",
+            franchise: stat.franchise || "personal",
+          };
+        }
         totalPlaysInPeriod += count;
       });
 
@@ -162,7 +213,7 @@ export default function AdminDashboardPage() {
 
       const finalUserList = Object.keys(userPlayCounts).map(uid => {
         const p = userPlayCounts[uid] || 0;
-        const info = userMap[uid] || {};
+        const info = userMap[uid] || statUserInfoMap[uid] || {};
 
         return { 
             id: uid, 
@@ -315,7 +366,7 @@ export default function AdminDashboardPage() {
             <span style={{ color: "#888" }}>~</span>
             <input type="date" value={dateRange.end} onChange={(e)=>setDateRange({...dateRange, end:e.target.value})} className="common-input" />
           </div>
-          <button onClick={() => fetchRealData(true)} className="primary-btn">조회</button>
+          <button onClick={handleFetch} className="primary-btn">조회</button>
         </div>
 
         <button onClick={syncMissingData} disabled={syncing || loading} className={`sync-btn ${syncing ? 'disabled' : ''}`}>
@@ -397,7 +448,7 @@ export default function AdminDashboardPage() {
                     <td>{user.plays.toLocaleString()} 곡</td>
                     <td className="revenue-text">{user.revenue.toLocaleString()} 원</td>
                     <td>
-                      <button onClick={() => router.push(`/admin/dashboard/${user.firebaseUid || user.id}`)} className="detail-btn">상세보기</button>
+                      <button onClick={() => handleViewDetail(user)} className="detail-btn">상세보기</button>
                     </td>
                   </tr>
                 ))

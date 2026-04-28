@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, writeBatch, doc, Timestamp, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, writeBatch, doc, Timestamp, limit } from "firebase/firestore";
 import { calculateRevenue, GOAL_PLAYS } from "@/lib/revenue";
 import { formatYMD, getDatesInRange, getDefaultDateRange } from "@/lib/date-utils";
 import { KST_OFFSET, DAILY_MAX_COUNT } from "@/lib/stats-constants";
@@ -16,9 +16,12 @@ import { deleteUser } from "firebase/auth";
 interface UserDashboardProps {
   targetId: string; 
   isAdmin?: boolean; 
+  initialStart?: string;
+  initialEnd?: string;
+  returnHref?: string;
 }
 
-export default function UserDashboard({ targetId, isAdmin = false }: UserDashboardProps) {
+export default function UserDashboard({ targetId, isAdmin = false, initialStart, initialEnd, returnHref }: UserDashboardProps) {
   const router = useRouter();
   const { user } = useAuth(); // ✅ 현재 로그인된 유저 정보 가져오기
   const [loading, setLoading] = useState(true);
@@ -35,32 +38,70 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
   
   const [chartData, setChartData] = useState<any[]>([]);
 
-  const [dateRange, setDateRange] = useState(getDefaultDateRange);
+  const [dateRange, setDateRange] = useState(() => {
+    const defaults = getDefaultDateRange();
+    return {
+      start: initialStart || defaults.start,
+      end: initialEnd || defaults.end,
+    };
+  });
 
   useEffect(() => {
     async function initData() {
       if (!targetId) return;
       setLoading(true);
       try {
-        let storeData = null;
+        let storeData: any = null;
         let realLastfmId = "";
 
         // 💡 1. 헛스윙하던 getDoc 부분 삭제! 바로 uid로 검색(query)합니다.
         const storesRef = collection(db, "monitored_users");
-        const q = query(storesRef, where("uid", "==", targetId));
-        const querySnapshot = await getDocs(q);
+        const qByUid = query(storesRef, where("uid", "==", targetId), limit(1));
+        let querySnapshot = await getDocs(qByUid);
+
+        if (querySnapshot.empty && isAdmin) {
+          const qByLastfm = query(storesRef, where("lastfm_username", "==", targetId), limit(1));
+          querySnapshot = await getDocs(qByLastfm);
+        }
 
         // 💡 2. 데이터가 있으면 가져오기
         if (!querySnapshot.empty) {
           const d = querySnapshot.docs[0];
-          storeData = d.data();
+          storeData = { ...d.data(), isTemporary: false };
           realLastfmId = storeData.lastfm_username;
+        }
+
+        if (!storeData && isAdmin) {
+          const statsRef = collection(db, "daily_stats");
+          const qStatsByLastfm = query(statsRef, where("lastfm_username", "==", targetId), limit(1));
+          let statsSnapshot = await getDocs(qStatsByLastfm);
+          let statsUserField = "lastfm_username";
+
+          if (statsSnapshot.empty) {
+            const qStatsByUserId = query(statsRef, where("userId", "==", targetId), limit(1));
+            statsSnapshot = await getDocs(qStatsByUserId);
+            statsUserField = "userId";
+          }
+
+          if (!statsSnapshot.empty) {
+            const d = statsSnapshot.docs[0].data();
+            realLastfmId = d.lastfm_username || d.userId || targetId;
+            storeData = {
+              id: realLastfmId,
+              lastfm_username: realLastfmId,
+              store_name: d.store_name || "Unknown",
+              owner_name: d.owner_name || "이름 없음",
+              franchise: d.franchise || "personal",
+              isTemporary: true,
+              statsUserField,
+            };
+          }
         }
 
         // 💡 3. 정보 세팅
         if (storeData && realLastfmId) {
           setStoreInfo({ ...storeData, id: realLastfmId });
-          await fetchDashboardData(realLastfmId, dateRange.start, dateRange.end, storeData.franchise);
+          await fetchDashboardData(realLastfmId, dateRange.start, dateRange.end, storeData.franchise, storeData.statsUserField);
         } else {
           setStoreInfo(null);
           if (isAdmin) {
@@ -77,7 +118,7 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
     initData();
   }, [targetId, isAdmin]);
 
-  const fetchDashboardData = async (lastfmId: string, startStr: string, endStr: string, franchise: string) => {
+  const fetchDashboardData = async (lastfmId: string, startStr: string, endStr: string, franchise: string, statsUserField = "lastfm_username") => {
     setLoading(true);
     try {
         const statsColl = collection(db, "daily_stats");
@@ -87,7 +128,7 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
         // 이렇게 해야 보안 규칙에서 튕기지 않으며, DB 읽기 요금이 수십 배 절약됩니다!
         const qStats = query(
             statsColl, 
-            where("lastfm_username", "==", lastfmId), 
+            where(statsUserField, "==", lastfmId), 
             where("date", ">=", startStr), 
             where("date", "<=", endStr)
         );
@@ -102,7 +143,7 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
         // 이전 달 데이터도 동일하게 내 것만 콕 집어서!
         const qPrevStats = query(
             statsColl, 
-            where("lastfm_username", "==", lastfmId), 
+            where(statsUserField, "==", lastfmId), 
             where("date", ">=", prevStartStr), 
             where("date", "<=", prevEndStr)
         );
@@ -288,7 +329,7 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
     return (
       <div style={{ padding: 100, textAlign: "center", color: "white" }}>
         <p style={{ marginBottom: 20 }}>매장 정보를 찾을 수 없습니다.</p>
-        <button onClick={() => router.push('/')} style={primaryBtnStyle}>메인으로 돌아가기</button>
+        <button onClick={() => router.push(returnHref || (isAdmin ? "/admin/dashboard" : "/"))} style={primaryBtnStyle}>돌아가기</button>
       </div>
     );
   }
@@ -299,12 +340,13 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
       {isAdmin && (
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
           <button 
-            onClick={() => router.back()}
+            onClick={() => router.push(returnHref || "/admin/dashboard")}
             style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "14px", display: "flex", alignItems: "center", gap: "5px" }}
           >
             ← 목록으로 돌아가기
           </button>
           
+          {!storeInfo.isTemporary && (
           <button 
             onClick={syncData} 
             disabled={syncing}
@@ -312,6 +354,7 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
           >
             {syncing ? "🔄 동기화 중..." : "⚠️ 데이터 재산출"}
           </button>
+          )}
         </div>
       )}
 
@@ -330,6 +373,11 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
           </h2>
           <div style={{ color: "#888", fontSize: "14px" }}>
             ID: {storeInfo.lastfm_username} | 유형: {storeInfo.franchise === 'seveneleven' ? '세븐일레븐' : '개인/기타'}
+            {storeInfo.isTemporary && (
+              <span style={{ marginLeft: 10, padding: "2px 8px", borderRadius: 999, background: "#4b5563", color: "white", fontSize: 12 }}>
+                등록 정보 없음 · 임시 통계
+              </span>
+            )}
           </div>
         </div>
 
@@ -359,7 +407,7 @@ export default function UserDashboard({ targetId, isAdmin = false }: UserDashboa
           <span style={{ color: "#888" }}>~</span>
           <input type="date" value={dateRange.end} onChange={(e)=>setDateRange({...dateRange, end:e.target.value})} style={inputStyle} />
           <button 
-            onClick={() => fetchDashboardData(storeInfo.id, dateRange.start, dateRange.end, storeInfo.franchise)} 
+            onClick={() => fetchDashboardData(storeInfo.id, dateRange.start, dateRange.end, storeInfo.franchise, storeInfo.statsUserField)} 
             disabled={loading}
             style={primaryBtnStyle}
           >

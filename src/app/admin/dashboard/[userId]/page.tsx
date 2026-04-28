@@ -1,19 +1,34 @@
-import UserDashboard from "@/components/UserDashboard"; 
+import UserDashboard from "@/components/UserDashboard";
 
-// Next.js 15부터 params는 Promise입니다.
-export default async function AdminUserDetailPage({ 
-  params 
-}: { 
-  params: Promise<{ userId: string }> 
+export default async function AdminUserDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ userId: string }>;
+  searchParams: Promise<{ start?: string; end?: string; q?: string; source?: string }>;
 }) {
-  // 1. await로 파라미터를 먼저 꺼냅니다.
   const resolvedParams = await params;
-  const userId = resolvedParams.userId;
+  const resolvedSearchParams = await searchParams;
+  const userId = decodeURIComponent(resolvedParams.userId);
+
+  const dashboardParams = new URLSearchParams();
+  if (resolvedSearchParams.start) dashboardParams.set("start", resolvedSearchParams.start);
+  if (resolvedSearchParams.end) dashboardParams.set("end", resolvedSearchParams.end);
+  if (resolvedSearchParams.q) dashboardParams.set("q", resolvedSearchParams.q);
+
+  const returnHref = dashboardParams.toString()
+    ? `/admin/dashboard?${dashboardParams.toString()}`
+    : "/admin/dashboard";
 
   return (
     <section style={{ width: "100%", minHeight: "100vh", backgroundColor: "#111", paddingBottom: "50px" }}>
-      {/* 2. 꺼낸 userId를 넘겨줍니다. */}
-      <UserDashboard targetId={userId} isAdmin={true} />
+      <UserDashboard
+        targetId={userId}
+        isAdmin={true}
+        initialStart={resolvedSearchParams.start}
+        initialEnd={resolvedSearchParams.end}
+        returnHref={returnHref}
+      />
     </section>
   );
 }
